@@ -1,0 +1,47 @@
+#editor-menu {
+	background-color: gray;
+	color: red;
+	max-width: 1020px;
+	min-height: 30px;
+}
+
+.editor {
+	max-width: 1020px;
+	width: 1020px;
+	min-height: 400px;
+	resize: none;
+}
+
+.clickable-menuitem {
+	float: right;
+	margin: 6 10px 0 10px;
+	background-color: #123456;
+	min-width: 80px;
+	text-align: center;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.clickable-menuitem active {
+	background-color: green;
+}
+
+.hidden-menubar {
+	background-color: gray;
+	color: red;
+	max-width: 1020px;
+	min-height: 30px;
+	display: none;
+}
+.hidden-menuitem {
+	float: right;
+	margin: 6 10px 0 10px;
+	background-color: #123456;
+	min-width: 80px;
+	text-align: center;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
