@@ -1,45 +1,30 @@
-function getElementByClassName(classname)	{	
-	var els = document.getElementsByTagName('*');
-	var elsLen = els.length;
-	var tmp = new Array();
-	var pattern = new RegExp("(^|\\s)"+classname+"(\\s|$)");
-	for (i = 0, j = 0; i < elsLen; i++) {
-		if ( pattern.test(els[i].className) ) {
-			tmp[j] = els[i];
-			j++;
-		}
-	}
-	return tmp;	
-}
-
-function TagContView() {
-	document.getElementById('html_menu').setAttribute("name", "");
-	document.getElementById('html_menu').style.backgroundColor="#123456";
-	document.getElementById('tag_cont_menu').style.backgroundColor="green";
-	document.getElementById('tag_cont_menu').setAttribute("name", "active");
-	document.getElementById('hidden-menu').style.display = "block";
-}
-
-function htmlView(){
-	document.getElementById('html_menu').setAttribute("name", "active");
-	document.getElementById('html_menu').style.backgroundColor="green";
-	document.getElementById('tag_cont_menu').style.backgroundColor="#123456";
-	document.getElementById('tag_cont_menu').setAttribute("name", "");
-	document.getElementById('hidden-menu').style.display = "none";
-}
+//ha befejeztuk az irast, akkor atvalt a szovegmezo bekezdesse
 function removeTextArea(element) {
 	var string = element.value;
 	element.parentNode.innerHTML = string;
+	document.getElementById('new-text').style.backgroundColor="#123456";
 }
-function editorFunction() {alert("editor");}
-function insertText() {
-	var pp = document.createElement("p");
+//ha szerkesztunk egy bekezdest, akkor megjelenik a szovegmezo
+function editTextArea(element) {
+	var string = element.innerText;
 	var txt = document.createElement("textarea");
 	txt.setAttribute("autofocus", "autofocus");
 	txt.setAttribute("onblur", "removeTextArea(this)");
-	pp.appendChild(txt);
-	var element = document.getElementById("editor-box");
-	element.appendChild(pp);
+	txt.value = string;
+	element.innerHTML = "";
+	document.getElementById('new-text').style.backgroundColor="green";
+	element.appendChild(txt);
+}
+function editorFunction(element) {
+	if(editMode) {
+		alert("editor");
+	}
+}
+//A megkezdett, de meg be nem fejezett szovegbeviteli mezok szama, de masra is hasznalhato lesz
+function numOfActiveInputFields(name) {
+	var tmp = getElementsByName(name);
+	var result = tmp.length;
+	return result;
 }
 
 function changescript(text, element) {
@@ -47,13 +32,13 @@ function changescript(text, element) {
 		text = '<div id=\'dn1\'>\n\t<h1 id=\'hn1\'>TTT</h1>\n\t<p id=\'pn1\'>szovegesmezo</p>\n</div>';
 	}
 	if(document.getElementById('tag_cont_menu').getAttribute("name") != "active") {
-		text = convertHtmlTextFormat(text);
-		TagContView();
-		document.getElementById('editor-box').innerHTML = text;
-		var changeOnClickInTmp_Object = getElementByClassName("tmp_object");
-		for (var a = 0; a < changeOnClickInTmp_Object.length; a++) {
-			changeOnClickInTmp_Object[a].onclick = function() { editorFunction()};
-		}
+			text = convertHtmlTextFormat(text);
+			TagContView();
+			document.getElementById('editor-box').innerHTML = text;
+			var changeOnClickInTmp_Object = getElementByClassName("tmp_object");
+			for (var a = 0; a < changeOnClickInTmp_Object.length; a++) {
+				changeOnClickInTmp_Object[a].onclick = function(e) { editorFunctione(e)};
+			}
 	}
 }
 
@@ -111,7 +96,6 @@ function convertTextHtmlFormat(text) {
 				newLine = false;
 			}
 			if(divNewLine) {
-			//	myOutput+= '<br class=\"remove\" />';
 				divNewLine = false;
 			}
 		}
@@ -123,9 +107,3 @@ function convertTextHtmlFormat(text) {
 	return myOutput;
 }
 
-function showHtml(element) {
-	htmlView();
-	var	text = '<div id=\'dn1\'><h1 id=\'hn1\'>TTT</h1><p id=\'pn1\'>szovegesmezo</p></div>';
-	var result = convertTextHtmlFormat(text);
-	document.getElementById('editor-box').innerHTML = result;
-}
