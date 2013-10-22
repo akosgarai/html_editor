@@ -1,4 +1,6 @@
 var editMode = false;
+var elementInEditor = null;
+var idNumber = 0;
 
 //Egy elem szuloelemenek a torlese
 function removeParent(element) {
@@ -22,3 +24,8 @@ function getElementByClassName(classname)	{
 	return tmp;	
 }
 
+function generateId(element) {
+	var id = element.tagName + "_nr_" + idNumber;
+	idNumber++;
+	return id;
+}

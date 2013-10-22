@@ -28,10 +28,11 @@ function numOfActiveInputFields(name) {
 }
 
 function changescript(text, element) {
-	if(typeof(text) == 'undefined') {
-		text = '<div id=\'dn1\'>\n\t<h1 id=\'hn1\'>TTT</h1>\n\t<p id=\'pn1\'>szovegesmezo</p>\n</div>';
-	}
 	if(document.getElementById('tag_cont_menu').getAttribute("name") != "active") {
+			if(typeof(element) != "undefined") { 
+				element.setAttribute("id", "selected_element"); 
+				elementInEditor = document.getElementById('editor-box').innerHTML;
+			}
 			text = convertHtmlTextFormat(text);
 			TagContView();
 			document.getElementById('editor-box').innerHTML = text;
@@ -39,9 +40,10 @@ function changescript(text, element) {
 			for (var a = 0; a < changeOnClickInTmp_Object.length; a++) {
 				changeOnClickInTmp_Object[a].onclick = function(e) { editorFunctione(e)};
 			}
+			 removeClickableElements(document.getElementById('editor-box'));
+			 removeMultipleTempDivsV2(document.getElementById('editor-box'));
 	}
 }
-
 function convertHtmlTextFormat(text) {
 	var myInput = text;
 	var myOutput = '';
@@ -72,13 +74,15 @@ function convertTextHtmlFormat(text) {
 	for (i = 0; i < myInput.length; i++) {
 		var curChar = (myInput.charAt(i));
 		var nextChars =(myInput.charAt(i+1)) + (myInput.charAt(i+2)) + (myInput.charAt(i+3)); 
-		var spanStart = '<div class=\"tmp_object\" style=\"padding-left: ' + 10*indent + 'px;\" onClick=\"changescript(this.innerHTML, this)\">';
+		var id = generateId(document.createElement("div"));
+		var spanStart = '<div id=\"clickable_' + id + '\" class=\"tmp_object\" style=\"padding-left: ' + 10*indent + 'px;\" onClick=\"changescript(this.innerHTML, this)\">';
 		var spanEnd = '</div>';
 		if (curChar == '<') {
 			if(myInput.charAt(i+1) == '/') {
 				newLine = true;
 				indent--;
 			} else {
+				if(!divNewLine)
 				myOutput += spanStart;
 				indent++;
 			}
@@ -106,4 +110,3 @@ function convertTextHtmlFormat(text) {
 	}
 	return myOutput;
 }
-

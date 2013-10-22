@@ -22,12 +22,101 @@ function hiddenMenusOff() {
 	}
 }
 
+//ket divnek nem lenne szabad egymas utan allnia
+function removeMultipleTempDivsV2(element){
+	if(!element.childNodes[0]) {
+		return 1;
+	}
+	var notDivElements;
+	if(element.tagName == "DIV" && element.id != "") {
+		for (var cnum = 0; cnum < element.childNodes.length; cnum++) {
+			if(element.childNodes[cnum].tagName == "DIV" && element.childNodes[cnum].id == "" ) {
+				var removethis = element.childNodes[cnum];
+				var tmpdiv = document.createElement("div");
+				for (var tmpcnum = cnum; tmpcnum < element.childNodes.length; tmpcnum++) {
+					tmpdiv.appendChild(element.childNodes[tmpcnum]);
+				}
+				if(!removethis.childNodes[0]) {
+					for (var ret = 0; ret < tmpdiv.childNodes.length; ret++) {
+						removeMultipleTempDivsV2(element.childNodes[ret]);
+						element.appendChild(tmpdiv.childNodes[ret]);
+					}
+				} else {
+					for (var ret = 0; ret < removethis.childNodes.length; ret++) {
+						removeMultipleTempDivsV2(removethis.childNodes[ret]);
+						element.appendChild(removethis.childNodes[ret]);
+					}
+					for (var ret = 0; ret < tmpdiv.childNodes.length; ret++) {
+						removeMultipleTempDivsV2(element.childNodes[ret]);
+						element.appendChild(tmpdiv.childNodes[ret]);
+					}
+				}
+			}
+			//removeMultipleTempDivsV2(element);
+		}
+	}
+	for (var cnum = 0; cnum < element.childNodes.length; cnum++) {
+		removeMultipleTempDivsV2(element.childNodes[cnum]);
+	}
+}
+
+function removeClickableElements(element) {
+	if(!element.childNodes[0]) {
+		return 1;
+	}
+	if(element.tagName == "DIV" && element.id != "" && element.id.substring(0, 9) == "clickable") {
+		element.setAttribute("id", "");
+	}
+	for (var cnum = 0; cnum < element.childNodes.length; cnum++) {
+		if(element.childNodes[cnum].tagName == "DIV" && element.childNodes[cnum].id != "" && element.childNodes[cnum].id.substring(0, 9) == "clickable") {
+			var removethis = element.childNodes[cnum];
+			var tmpdiv = document.createElement("div");
+			if(removethis.childNodes[0]) {
+				for (var cntr = 0; cntr < removethis.childNodes.length; cntr++) {
+					tmpdiv.appendChild(removethis.childNodes[cntr]);
+				}
+			}
+			for (var tmpcnum = cnum; tmpcnum < element.childNodes.length; tmpcnum++) {
+				tmpdiv.appendChild(element.childNodes[tmpcnum]);
+				//alert(element.id);
+			}
+			for (var cntr = 0; cntr < tmpdiv.childNodes.length; cntr++) {
+				//a temp tombot vegigkikeresni beloluk a diveket.
+				removeClickableElements(tmpdiv.childNodes[cntr]);
+			}
+			for (var cntr = 0; cntr < tmpdiv.childNodes.length; cntr++) {
+				element.appendChild(tmpdiv.childNodes[cntr]);
+			}
+		}		
+	}
+	for (var cnum = 0; cnum < element.childNodes.length; cnum++) {
+		removeClickableElements(element.childNodes[cnum]);
+	}
+}
 //HTML nezetre valtas - a nyomogomb lenyomasa
-function showHtml() {
-	htmlView();
-	var	text = '<div id=\'dn1\'><h1 id=\'hn1\' name=\'editor-elem\'>TTT</h1><p id=\'pn1\' name=\'editor-elem\'>szovegesmezo</p></div>';
+function showHtml(pageContent) {
+	if(typeof(pageContent) != "undefined" && pageContent != ""){
+		alert(typeof(pageContent));
+		var	text = pageContent;
+	} else {
+		if (!document.getElementById('DIV_nr_0')) {
+			var	text = "<div id=\"dn1\" name=\"editor-element\">" + document.getElementById('editor-box').innerHTML + "</div>";
+		} else var text = document.getElementById('editor-box').innerHTML;
+	}
 	var result = convertTextHtmlFormat(text);
-	document.getElementById('editor-box').innerHTML = result;
+	if (document.getElementById('html_menu').getAttribute("name") != "active") {
+		htmlView();
+		if(elementInEditor != null) {
+			document.getElementById('editor-box').innerHTML = elementInEditor;
+			document.getElementById('selected_element').innerHTML = result;
+			document.getElementById('selected_element').setAttribute("id", "");
+			elementInEditor = null;
+		} else {
+			//if(typeof(result) != 'undefined')
+			document.getElementById('editor-box').innerHTML = result;
+		}
+		removeMultipleTempDivsV2(document.getElementById('editor-box'));
+	}
 }
 //uj szovegdoboz beszurasa es arra fokuszalas, hogy lehessen bele irni. Az iras addig tart, amig ki nem kattintunk belole.
 //Az uj szoveg beszurasa gomb lenyomasa
@@ -59,7 +148,15 @@ function insertText() {
 	pp.appendChild(finished);
 	pp.appendChild(cancel);
 	var element = document.getElementById("editor-box");
-	element.appendChild(pp);
+	if(element.firstChild) {
+		element.firstChild.appendChild(pp);
+	} else {
+		var dn1 = document.createElement("div");
+		var divId = generateId(dn1);
+		dn1.setAttribute("id", divId);
+		element.appendChild(dn1);
+		element.firstChild.appendChild(pp);
+	}
 }
 
 //felpakolja az onclick esemenyt a p, h* tagekre, ha edit modba valtunk
@@ -91,4 +188,9 @@ function editModeOn() {
 		hiddenMenusOff();
 		editMode = false;
 	}
+}
+
+function changeBgColor(element) {
+	var color =  element.options[element.selectedIndex];
+	alert(color.value);
 }

@@ -4,12 +4,17 @@
 	max-width: 1020px;
 	min-height: 30px;
 }
-
+#editor-container {
+	max-width: 1220px;
+	min-width: 1220px;
+	margin-right: 200px;
+}
 .editor {
 	max-width: 1020px;
 	width: 1020px;
 	min-height: 400px;
 	resize: none;
+	background-color: #fffffb;
 }
 
 .clickable-menuitem {
@@ -44,4 +49,15 @@
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	cursor: pointer;
+}
+#style-menu {
+	background-color: gray;
+	float: left;
+	padding-top: 60px;
+	max-width: 200px;
+	min-width: 200px;
+	min-height: 400px;
+}
+.bg-color-selector {
+	background-color: #c0c0c0;
 }
