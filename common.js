@@ -1,4 +1,5 @@
 var editMode = false;
+var editingText = false;
 var elementInEditor = null;
 var idNumber = 0;
 
