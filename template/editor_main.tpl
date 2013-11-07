@@ -15,6 +15,8 @@
 			</div>
 			<div id="hidden-menu" class="hidden-menubar">
 				<div class="hidden-menuitem" id="new-text" onclick="insertText()">P</div>
+				<div class="hidden-menuitem" id="new-h" onclick="insertText(this)">H</div>
+				<button class="hidden-menuitem" id="new-b" onclick="getSelectionHtml()">B</button>
 				<div class="hidden-menuitem" id="edit-mode" onclick="editModeOn()">Edit</div>
 			</div>
 			<div id="editor-box" class="editor">{$main_screen}</div>
