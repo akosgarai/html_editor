@@ -76,7 +76,7 @@ function convertTextHtmlFormat(text) {
 		var curChar = (myInput.charAt(i));
 		var nextChars =(myInput.charAt(i+1)) + (myInput.charAt(i+2)) + (myInput.charAt(i+3)); 
 		var id = generateId(document.createElement("div"));
-		var spanStart = '<div id=\"clickable_' + id + '\" class=\"tmp_object\" style=\"padding-left: ' + 10*indent + 'px;\" onClick=\"changescript(this.innerHTML, this)\">';
+		var spanStart = '<div id=\"clickable_' + id + '\" class=\"tmp_object\" style=\"padding-left: ' + 10*indent + 'px;\" onClick=\"changescript(this.innerText, this)\">';
 		var spanEnd = '</div>';
 		if (curChar == '<') {
 			if(myInput.charAt(i+1) == '/') {
