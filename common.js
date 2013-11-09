@@ -69,6 +69,7 @@ function highlightText(string, element) {
 	return element;
 }
 function decorateUserHighlight(element){
+	//beallitja az offsetet (start) es a range hosszat (end)
 	if (typeof window.getSelection != "undefined") {
 		range = window.getSelection().getRangeAt(0);
 		priorRange = range.cloneRange();
@@ -77,14 +78,74 @@ function decorateUserHighlight(element){
 		start = priorRange.toString().length;
 		end = start + range.toString().length;
 	}
+	/*******************************
+	//kikeresi azt a nodeot ami a szoveget tartalmazza. ha az egesz kijeloles a nodeon belul van, akkor a node 3 reszre lesz pattintva
+	//ha a kijeloles hosszabb, akkor a node ket reszre osztodik, endet csokkentjuk az elso nodeban kijelolt resszel, majd a kovetkezo textnodeon folytatjuk
+	//a kijelolest.
+	********************************/
 	var actelement = window.getSelection().getRangeAt(0).startContainer.parentNode;
 	for (var a = 0; a < actelement.childNodes.length; a++) {
-		if(actelement.childNodes[a] === window.getSelection().getRangeAt(0).startContainer) {
-			var fragment = document.createDocumentFragment();
-			fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(0, start)));
-			fragment.appendChild(highlightText(actelement.childNodes[a].nodeValue.substr(start, end-start), element));
-			fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(end)));
-			actelement.replaceChild(fragment, actelement.childNodes[a]);
+		if (actelement.childNodes[a] === window.getSelection().getRangeAt(0).startContainer) {
+			if (actelement.childNodes[a].length >= end) {
+				var fragment = document.createDocumentFragment();
+				fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(0, start)));
+				fragment.appendChild(highlightText(actelement.childNodes[a].nodeValue.substr(start, end-start), element.cloneNode()));
+				fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(end)));
+				actelement.replaceChild(fragment, actelement.childNodes[a]);
+			} else  {
+				var fragment = document.createDocumentFragment();
+				fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(0, start)));
+				end = end - actelement.childNodes[a].nodeValue.substr(start).length;
+				fragment.appendChild(highlightText(actelement.childNodes[a].nodeValue.substr(start), element.cloneNode()));
+				actelement.replaceChild(fragment, actelement.childNodes[a]);
+				a += 2;
+				b = a;
+				while (end - start > 0) {
+					if(actelement.childNodes[b]) {
+						for (b = a; b < actelement.childNodes.length; b++) {
+							if (actelement.childNodes[b].nodeType == 3) {
+								if (actelement.childNodes[b].nodeValue.length < end - start) {
+									if (typeof(actelement) == element) {
+										end = end - actelement.childNodes[b].nodeValue.length;
+									} else {
+										var fragment = document.createDocumentFragment();
+										fragment.appendChild(highlightText(actelement.childNodes[b].nodeValue, element.cloneNode()));
+										end = end - actelement.childNodes[b].nodeValue.length;
+										actelement.replaceChild(fragment, actelement.childNodes[b]);
+										b++;
+									}
+								} else {
+									var fragment = document.createDocumentFragment();
+									fragment.appendChild(highlightText(actelement.childNodes[b].nodeValue.substr(0, end - start), element.cloneNode()));
+									fragment.appendChild(document.createTextNode(actelement.childNodes[b].nodeValue.substr(end - start)));
+									actelement.replaceChild(fragment, actelement.childNodes[b]);
+									end = 0;
+									b = actelement.childNodes.length + 1;
+								}
+							}
+						}
+					} else {
+						a = 0;
+						b = 0;
+						var found = false;
+						while (found == false) {
+							var parentelement = actelement.parentNode;
+							for (var c = 0; c < parentelement.childNodes.length; c++) {
+								if (parentelement.childNodes[c] === actelement) {
+									if (!parentelement.childNodes[c+1]) {
+										actelement = actelement.parentNode;
+									} else {
+										actelement = parentelement.childNodes[c+1];
+										c = parentelement.childNodes.length + 1;
+										found = true;
+									}
+								}
+							}
+						}
+					}
+				}
+				return;
+			}
 		}
 	}
 }
