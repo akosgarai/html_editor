@@ -9,15 +9,18 @@
 <body style="background-color: #1a1a1a;">
 	<div id="editor-container">
 		<div style="float: left;">
-			<div id="editor-menu" class="menubar">
-				<div class="clickable-menuitem" id="html_menu"  onclick="showHtml('{$pageContent}')">{$menus[0]}</div>
-				<div class="clickable-menuitem" id="tag_cont_menu" onclick="">{$menus[1]}</div>
-			</div>
-			<div id="hidden-menu" class="hidden-menubar">
-				<div class="hidden-menuitem" id="new-text" onclick="insertText()">P</div>
-				<div class="hidden-menuitem" id="new-h" onclick="insertText(this)">H</div>
-				<button class="hidden-menuitem" id="new-b" onclick="getSelectionHtml()">B</button>
-				<div class="hidden-menuitem" id="edit-mode" onclick="editModeOn()">Edit</div>
+			<div class="editor-menubar-container">
+				<div id="editor-menu" class="menubar">
+					<div class="clickable-menuitem" id="html_menu"  onclick="showHtml('{$pageContent}')">{$menus[0]}</div>
+					<div class="clickable-menuitem" id="tag_cont_menu" onclick="">{$menus[1]}</div>
+				</div>
+				<div id="hidden-menu" class="hidden-menubar">
+					<div class="hidden-menuitem bigmenu" id="new-text" onclick="insertText()">P</div>
+					<div class="hidden-menuitem bigmenu" id="new-h" onclick="insertText(this)">H</div>
+					<div class="hidden-menuitem bigmenu" id="edit-mode" onclick="editModeOn()">Edit</div>
+					<button class="hidden-menuitem smallmenu" id="new-b" onclick="getSelectionHtml('bold')">B</button>
+					<button class="hidden-menuitem smallmenu" id="new-i" onclick="getSelectionHtml('italic')">I</button>
+				</div>
 			</div>
 			<div id="editor-box" class="editor">{$main_screen}</div>
 		</div>

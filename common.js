@@ -64,11 +64,82 @@ function getSelectionCharOffsetsWithin(element) {
     }
 }
 //highlight
-function highlightText(string, element) {
+function highlightText(string, newClassName) {
+	var element = document. createElement("span");
+	element.setAttribute("name", "inserted");
+	element.className = newClassName;
 	element.innerHTML = string;
 	return element;
 }
-function decorateUserHighlight(element){
+function isInClass(element, cName) {
+	var regExp = new RegExp(cName);
+	return regExp.test(element.className);
+}
+function replaceTextNode(textNode, start, end, newClass) {
+				var fragment = document.createDocumentFragment();
+				var incr = 0;
+				if (isInClass(textNode.parentNode, newClass)){
+					return { 
+						fragment: textNode,
+						inc: 1
+					}
+				}
+				if (start > 0) {
+					fragment.appendChild(document.createTextNode(textNode.nodeValue.substr(0, start)));
+					incr++
+				}
+				fragment.appendChild(highlightText(textNode.nodeValue.substr(start, end-start), newClass));
+				incr++
+				if (end < textNode.nodeValue.length) {
+					fragment.appendChild(document.createTextNode(textNode.nodeValue.substr(end)));
+					incr++
+				}
+				return {
+					fragment: fragment,
+					inc: incr
+				}
+}
+function findNextTextNode(element) {
+	if (element.parentNode.name != "inserted") {
+		if (element.nodeType == 3) {
+			return element;
+		}
+		if (element.childNodes[0]) {
+			return findNextTextNode(element.childNodes[0]);
+		}
+	} else {
+		element.parentNode.setAttribute("name", "");
+	}
+	var parentElement = element.parentNode;
+	for (var cntr = 0; cntr < parentElement.childNodes.length; cntr++) {
+		if (parentElement.childNodes[cntr] === element) {
+			if (!parentElement.childNodes[cntr + 1]) {
+				var found = false; 
+				while (!found) {
+					var newParent = parentElement.parentNode;
+					for (var pcntr = 0; pcntr < newParent.childNodes.length; pcntr++) {
+						if (newParent.childNodes[pcntr] === parentElement) {
+							if (!newParent.childNodes[pcntr + 1]) {
+								parentElement = newParent;
+								pcntr = newParent.childNodes.length + 1;
+							} else {
+								parentElement = newParent.childNodes[pcntr + 1];
+								found = true;
+								pcntr = newParent.childNodes.length + 1;
+							}
+						}
+					}
+				}
+				return findNextTextNode(parentElement);
+			}
+		return findNextTextNode(parentElement.childNodes[cntr + 1]);
+		}
+	}
+}
+function decorateUserHighlight(newClass){
+	var start = 0;
+	var end = 0;
+	var cntr = 0;
 	//beallitja az offsetet (start) es a range hosszat (end)
 	if (typeof window.getSelection != "undefined") {
 		range = window.getSelection().getRangeAt(0);
@@ -78,6 +149,7 @@ function decorateUserHighlight(element){
 		start = priorRange.toString().length;
 		end = start + range.toString().length;
 	}
+	cntr = end;
 	/*******************************
 	//kikeresi azt a nodeot ami a szoveget tartalmazza. ha az egesz kijeloles a nodeon belul van, akkor a node 3 reszre lesz pattintva
 	//ha a kijeloles hosszabb, akkor a node ket reszre osztodik, endet csokkentjuk az elso nodeban kijelolt resszel, majd a kovetkezo textnodeon folytatjuk
@@ -86,50 +158,129 @@ function decorateUserHighlight(element){
 	var actelement = window.getSelection().getRangeAt(0).startContainer.parentNode;
 	for (var a = 0; a < actelement.childNodes.length; a++) {
 		if (actelement.childNodes[a] === window.getSelection().getRangeAt(0).startContainer) {
-			if (actelement.childNodes[a].length >= end) {
-				var fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(0, start)));
-				fragment.appendChild(highlightText(actelement.childNodes[a].nodeValue.substr(start, end-start), element.cloneNode()));
-				fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(end)));
-				actelement.replaceChild(fragment, actelement.childNodes[a]);
-			} else  {
-				var fragment = document.createDocumentFragment();
-				fragment.appendChild(document.createTextNode(actelement.childNodes[a].nodeValue.substr(0, start)));
-				end = end - actelement.childNodes[a].nodeValue.substr(start).length;
-				fragment.appendChild(highlightText(actelement.childNodes[a].nodeValue.substr(start), element.cloneNode()));
-				actelement.replaceChild(fragment, actelement.childNodes[a]);
-				a += 2;
+			if (actelement.childNodes[a].length >= cntr) {
+			/***************************
+			//amikor csak egy textnodeon belul jeloltuk ki a szoveget
+			***************************/
+				var fragment = replaceTextNode(actelement.childNodes[a], start, cntr, newClass);
+				if (fragment.inc == 1 && !isInClass(actelement, newClass)) {		//ha egyet nott, akkor ha nincs a szulonek olyan osztalya, akkor hozzavesszuk, egyebkent meg uj elem.
+					actelement.className += " " + newClass;
+				} else {
+					actelement.replaceChild(fragment.fragment, actelement.childNodes[a]);
+				}
+			} else {
+				/*************************
+				//ha hosszabb mezot jeloltunk ki mint a kezdo szovegmezo hossza, akkor az elso mezot ket reszre bentjuk, az elso fele marad kijeloletlen
+				//a masik fele pedig highlightolt ezert itt start = start, end pedig a sztring hossza lesz.
+				*************************/
+				var fragment = replaceTextNode(actelement.childNodes[a], start, actelement.childNodes[a].nodeValue.length, newClass);
+				cntr = cntr - actelement.childNodes[a].nodeValue.substr(start).length;
+				if (!isInClass(actelement, newClass)) {
+					actelement.replaceChild(fragment.fragment, actelement.childNodes[a]);
+				}
+				a += fragment.inc;
 				b = a;
-				while (end - start > 0) {
-					if(actelement.childNodes[b]) {
-						for (b = a; b < actelement.childNodes.length; b++) {
-							if (actelement.childNodes[b].nodeType == 3) {
-								if (actelement.childNodes[b].nodeValue.length < end - start) {
-									if (typeof(actelement) == element) {
-										end = end - actelement.childNodes[b].nodeValue.length;
-									} else {
-										var fragment = document.createDocumentFragment();
-										fragment.appendChild(highlightText(actelement.childNodes[b].nodeValue, element.cloneNode()));
-										end = end - actelement.childNodes[b].nodeValue.length;
-										actelement.replaceChild(fragment, actelement.childNodes[b]);
-										b++;
-									}
-								} else {
-									var fragment = document.createDocumentFragment();
-									fragment.appendChild(highlightText(actelement.childNodes[b].nodeValue.substr(0, end - start), element.cloneNode()));
-									fragment.appendChild(document.createTextNode(actelement.childNodes[b].nodeValue.substr(end - start)));
-									actelement.replaceChild(fragment, actelement.childNodes[b]);
-									end = 0;
-									b = actelement.childNodes.length + 1;
-								}
+				var acte = actelement.childNodes[a];
+				/*************************
+				//Elso blokk ket lehetosege utan vegignezzuk a maradek blokkokat a maradek karakterekert  
+				*************************/
+				while (cntr - start > 0) {
+					var nextText = findNextTextNode(actelement.childNodes[b]);
+					var parentelement = nextText.parentNode;
+					var index = -1;
+					//mivel removechild utan elveszett a node igy most valahogy megkeressuk.
+					for (var e = 0; e < parentelement.childNodes.length; e++) {
+						if (parentelement.childNodes[e] === nextText)
+							index = e;
+					}
+					if (nextText.nodeValue.length < cntr - start) {
+						if (isInClass(nextText.parentNode, newClass)) {
+							cntr = cntr - nextText.nodeValue.length;
+						} else {
+							if (nextText.parentNode.tagName == "SPAN") {
+								nextText.parentNode.className += " " + newClass;
+								nextText.parentNode.setAttribute("name", "inserted");
+								cntr = cntr - nextText.nodeValue.length;
+							} else {
+								var fragment = replaceTextNode(nextText, 0, nextText.nodeValue.length, newClass);
+								cntr = cntr - nextText.nodeValue.length;
+								actelement.replaceChild(fragment.fragment, nextText);
 							}
 						}
 					} else {
+						var fragment = replaceTextNode(nextText, 0, cntr - start, newClass);
+						actelement.replaceChild(fragment.fragment, nextText);
+						cntr = 0;
+					}
+				}
+				/*while (cntr - start > 0) {
+					if(actelement.childNodes[b]) {
+						for (b = a; b < actelement.childNodes.length; b++) {
+							if (actelement.childNodes[b].nodeType == 3){
+								if (actelement.childNodes[b].nodeValue.length < cntr - start) {
+									if (isInClass(actelement, newClass)) {
+										cntr = cntr - actelement.childNodes[b].nodeValue.length;
+									} else {
+										if (actelement.tagName == "SPAN") {
+											actelement.className += " " + newClass;
+											cntr = cntr - actelement.childNodes[b].nodeValue.length;
+											b++
+										} else {
+											var fragment = replaceTextNode(actelement.childNodes[b], 0, actelement.childNodes[b].nodeValue.length, newClass);
+											cntr = cntr - actelement.childNodes[b].nodeValue.length;
+											actelement.replaceChild(fragment.fragment, actelement.childNodes[b]);
+											b += fragment.inc;
+										}
+									}
+								} else {
+									var fragment = replaceTextNode(actelement.childNodes[b], 0, cntr - start, newClass);
+									actelement.replaceChild(fragment.fragment, actelement.childNodes[b]);
+									cntr = 0;
+									b = actelement.childNodes.length + 1;
+								}
+							} else {
+								//Itt kell vizsgalni, hoogy ha nem text node van, akkor melyik az elso gyerek nodja, ami text
+								actelement = actelement.1childNodes[b];
+								b = 0;
+								a = 0;
+							}
+						}
+					} else {
+						var parentelement = actelement.parentNode;
+						var index = -1;
+						if (actelement.nodeType == 3) {
+							//mivel removechild utan elveszett a node igy most valahogy megkeressuk.
+							for (var e = 0; e < parentelement.childNodes.length; e++) {
+								if (parentelement.childNodes[e] === actelement)
+									index = e;
+							}
+							if (actelement.nodeValue.length < cntr - start) {
+								if (isInClass(actelement.parentNode, newClass)) {
+									cntr = cntr - actelement.nodeValue.length;
+								} else {
+									if (actelement.parentNode.tagName == "SPAN") {
+										actelement.parentNode.className += " " + newClass;
+										cntr = cntr - actelement.nodeValue.length;
+									} else {
+										var fragment = replaceTextNode(actelement, 0, actelement.nodeValue.length, newClass);
+										cntr = cntr - actelement.nodeValue.length;
+										if (actelement.parentNode)
+											actelement.parentNode.replaceChild(fragment.fragment, actelement);
+									}
+								}
+							} else {
+								var fragment = replaceTextNode(actelement, 0, cntr - start, newClass);
+								if (actelement.parentNode)
+									actelement.parentNode.replaceChild(fragment.fragment, actelement);
+								cntr = 0;
+							}
+							actelement = parentelement.childNodes[index]
+							parentelement = actelement.parentNode;
+						}
 						a = 0;
 						b = 0;
 						var found = false;
 						while (found == false) {
-							var parentelement = actelement.parentNode;
 							for (var c = 0; c < parentelement.childNodes.length; c++) {
 								if (parentelement.childNodes[c] === actelement) {
 									if (!parentelement.childNodes[c+1]) {
@@ -143,12 +294,12 @@ function decorateUserHighlight(element){
 							}
 						}
 					}
-				}
+				}*/
 				return;
 			}
 		}
 	}
 }
-function getSelectionHtml() {
-decorateUserHighlight(document.createElement("b"));
+function getSelectionHtml(cName) {
+decorateUserHighlight(cName);
 }

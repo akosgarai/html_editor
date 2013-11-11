@@ -16,7 +16,11 @@
 	resize: none;
 	background-color: #fffffb;
 }
-
+.editor-menubar-container {
+	background-color: gray;
+	min-height: 60px;
+	max-height: 60px;
+}
 .clickable-menuitem {
 	float: right;
 	margin: 6 10px 0 10px;
@@ -43,7 +47,6 @@
 	float: right;
 	margin: 6 10px 0 10px;
 	background-color: #123456;
-	min-width: 80px;
 	text-align: center;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -53,6 +56,14 @@
 	padding: 0px;
 	border: 0px;
 	height: 19px;
+}
+.bigmenu {
+	min-width: 80px;
+}
+
+.smallmenu{
+	min-width: 40px;
+	max-width: 40px;
 }
 #style-menu {
 	background-color: gray;
@@ -70,4 +81,10 @@ p {
 }
 h1 {
 	margin-top: 0px;
+}
+.bold {
+	font-weight: bold;
+}
+.italic {
+	font-style: italic;
 }
