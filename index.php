@@ -28,12 +28,12 @@ function listSavedPagesModule($queryResult) {
 }
 function init() {
 	global $savedPages;
-	global $errors;
+	global $messages;
 	$smarty1 = new Smarty;
 	$smarty1->assign('title', 'HTML Editor');
 	$smarty1->assign('buttons', array('New', 'Load'));
 	$smarty1->assign('savedPages', $savedPages);
-	$smarty1->assign('errors', $errors);
+	$smarty1->assign('messages', $messages);
 	$smarty1->display('template/index.tpl');
 
 }

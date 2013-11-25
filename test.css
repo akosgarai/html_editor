@@ -92,3 +92,38 @@ h1 {
 	background-color: white;
 	color: red;
 }
+.message {
+	background-color: white;
+	color: green;
+}
+.image-list {
+	width: 150px;
+	height: 40px;
+	background-color: white;
+}
+.image-name {
+	width: 150px;
+	height: 20px;
+}
+.image-bg {
+	background-color: #123456;
+	width: 50px;
+	height:20px;
+	margin: 0 5px 0 5px;
+	float: left;
+	text-align: center;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.image-img {
+	background-color: #123456;
+	width: 50px;
+	margin: 0 5px 0 5px;
+	height: 20px;
+	float: left;
+	text-align: center;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}

@@ -205,3 +205,27 @@ function changeColor(element) {
 	var color =  element.options[element.selectedIndex];
 	document.getElementById("editor-box").firstChild.style.color = color.value;
 }
+
+function setBgImage(src) {
+	document.getElementById("editor-box").firstChild.style.backgroundImage = "url(" + src + ")";
+	document.getElementById("editor-box").firstChild.style.backgroundRepeat = "no-repeat";
+}
+function insertImage(src) {
+	var imgCont = document.createElement("div");
+	imgCont.setAttribute("name", "editor-element");
+	var img = document.createElement("img");
+	img.setAttribute("src", src);
+	imgCont.appendChild(img);
+	document.getElementById("editor-box").firstChild.appendChild(imgCont);
+}
+function uploadImage(element) {
+	if (document.getElementById("html_menu").getAttribute("name") == "active") {
+		clickableElementsIdNull(document.getElementById('editor-box'));
+		removeUselessDivs(document.getElementById('editor-box'));
+		var page = document.getElementById("editor-box").innerHTML;
+		document.getElementById("saveEditorContent").value = preSaveFormat(page);
+		var form = document.getElementById("u-i-form");
+		alert (form.innerHTML);
+		form.submit();
+	}
+}

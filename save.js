@@ -8,7 +8,9 @@ function savePage() {
 	form_text.setAttribute("name", "savepage");
 	form_text.setAttribute("id", "savepage");
 	var page = document.getElementById("editor-box").innerHTML;
-	form_text.innerHTML = preSaveFormat(page);
-	form.appendChild(form_text);
-	form.submit();
+	if (document.getElementById('tag_cont_menu').getAttribute("name") == "active") {
+		form_text.innerHTML = preSaveFormat(page);
+		form.appendChild(form_text);
+		form.submit();
+	}
 }

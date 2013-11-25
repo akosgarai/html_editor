@@ -29,12 +29,14 @@
 		</div>
 		<div id="style-menu">
 		{$bgColorSelectorModule}<br />
-		{$fontColorSelectorModule}
+		{$fontColorSelectorModule}<br />
+		{$uploadImageModule}<br />
+		{$listImageModule}
 		</div>
 		<script type="text/javascript">
 			{$initScript}
 		</script>
-		<div id="error-box">{$errors}</div>
+		<div id="message-box" style="float:left;">{$messages}</div>
 	</div>
 </body>
 </html>

@@ -52,5 +52,23 @@ class editorModel {
 			return $result;
 		}
 	}
+	function uploadImage($imageName) {
+		$query = "INSERT INTO images (name, src) VALUES ('".$imageName."', 'upload/".$imageName."')";
+		$result = mysql_query($query, $this->cid);
+		if (!$result) {
+			return "ERROR_IMAGE_UPLOAD_ERROR, query: ".$query." errormsd: ".mysql_error();
+		} else {
+			return $result;
+		}
+	}
+	function listImages() {
+		$query = "SELECT * FROM images";
+		$result = mysql_query($query, $this->cid);
+		if (!$result) {
+			return "ERROR_IMAGE_LIST_ERROR, query: ".$query." errormsd: ".mysql_error();
+		} else {
+			return $result;
+		}
+	}
 }
 ?>

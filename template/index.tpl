@@ -12,7 +12,7 @@
 			<input type="submit" id="load_page" name="load_page" class="main_page_button" value="{$buttons[1]}">
 		</form>
 		<div id="saved-pages" class="saved-pages">{$savedPages}</div>
-		<div id="error-box">{$errors}</div>
+		<div id="messages-box">{$messages}</div>
 	</div>
 	<div style="">
 		<div style="width:50%; float:left;">Modern browsers have Array#indexOf, which does exactly that; this is in the new(ish) ECMAScript 5th edition specification, but it has been in several browsers for years. Older browsers can be supported using the code listed in the "compatibility" section at the bottom of that page.

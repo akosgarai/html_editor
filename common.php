@@ -1,8 +1,13 @@
 <?php
-$errors = "";
+$messages = "";
 function addError($error) {
-	global $errors;
+	global $messages;
 	$newError = "<span class=\"error\">".$error."</span>";
-  $errors .= $newError;
+  $messages .= $newError;
+}
+function addMessage($message) {
+	global $messages;
+	$newMessage = "<span class=\"message\">".$message."</span>";
+  $messages .= $newMessage;
 }
 ?>

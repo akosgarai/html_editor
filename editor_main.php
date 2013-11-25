@@ -31,17 +31,67 @@ if (array_key_exists("saved_pages", $_POST)) {
 	var_dump($row);
 	selector($row[page_content]);
 }
+/************
+Upload image
+************/
+function checkImageType($file) {
+	//var_dump($file);
+	$types = array("image/gif", "image/jpeg", "image/jpg", "image/png", "image/x-png","image/pjpeg");
+	$allowedExts = array("gif", "jpeg", "jpg", "png");
+	$temp = explode(".", $file["name"]);
+	$extension = end($temp);
+	if (in_array($extension, $allowedExts)) {
+		if ($file["error"] > 0) {
+			addError($file["error"]);
+		} else {
+			if (file_exists("upload/".$file["name"])) {
+				addError("File already exists.");
+			} else {
+				move_uploaded_file($file["tmp_name"], "upload/".$file["name"]);
+				return "OK";
+			}
+		}
+	} else {
+		addError("invalid file");
+	}
+}
+if (isset($_GET["action"]) && $_GET["action"] == "upload") {
+/*	if ($_FILES["file"]["error"] > 0) {
+		addError($_FILES["file"]["error"]);
+	}
+	var_dump($_GET);*/
+	$try = checkImageType($_FILES["file"]);
+	if ($try == "OK") {
+		$img = new editorModel();
+		$conn = $img->connect();
+		if ($conn != "OK") {
+			addError($conn);
+		}
+		$i = $img->uploadImage($_FILES["file"]["name"]);
+		if (substr($i, 0, 5) == "ERROR") {
+			addError($i);
+		} else {
+			addMessage("image Uploaded");
+		}
+	}
+	var_dump($_POST);
+	selector($_POST["saveEditorContent"]);
+}
 function selector($pageContent = NULL) {
 	$smarty = new Smarty;
-	global $errors;
+	global $messages;
 	$bgColorSelectorModule = backgroundColorSelector();
 	$fontColorSelectorModule = colorSelector();
+	$uploadImageModule = uploadImageModule();
+	$listImageModule = listImageModule();
 		$smarty->assign('title', 'HTML Editor');
 		$smarty->assign('main_screen', 'Ez itt a html editor kezdokepernyoje.');
 		$smarty->assign('menus', array('HTML', 'Tag Cont', 'Save'));
 		$smarty->assign('bgColorSelectorModule', $bgColorSelectorModule);
 		$smarty->assign('fontColorSelectorModule', $fontColorSelectorModule);
-		$smarty->assign('errors', $errors);
+		$smarty->assign('messages', $messages);
+		$smarty->assign('uploadImageModule', $uploadImageModule);
+		$smarty->assign('listImageModule', $listImageModule);
 		if($pageContent == NULL){
 			$smarty->assign('initScript', 'changescript("")');
 		} else {
@@ -68,5 +118,30 @@ function colorSelector() {
 	}
 	$module .= "</select>";
 	return $module;
+}
+function uploadImageModule() {
+	$module = "<form method=\"post\" action=\"editor_main.php?action=upload\" enctype=\"multipart/form-data\" id=\"u-i-form\"><label for=\"file\">Filename:</label><input type=\"file\" name=\"file\" id=\"file\"><br /><input type=\"hidden\" id=\"saveEditorContent\"><input type=\"button\" name=\"sb\" value=\"Upload\" onclick=\"uploadImage(this.parentNode)\"></form>";
+	return $module;
+}
+function listImageModule() {
+	$list = new editorModel();
+	$conn = $list->connect();
+	$container = "<div class=\"image-list\" onclick=\"\" >";
+
+	if ($conn != "OK") {
+		addError($conn);
+	}
+	$iList = $list->listImages();
+	if(substr($iList, 0, 5) == "ERROR") {
+		addError($iList);
+	} else {
+		$module = "<ul>";
+		while ($row = mysql_fetch_assoc($iList)) {
+			$buttons = "<div class=\"image-bg\" onclick=\"setBgImage('$row[src]')\">Bg</div><div class=\"image-img\" onclick=\"insertImage('$row[src]')\">I</div>";
+			$module .= "<li>$container<div class=\"image-name\">$row[name]</div>$buttons</div></li>";
+		}
+		$module .= "</ul>";
+	return $module;
+	}
 }
 ?>
