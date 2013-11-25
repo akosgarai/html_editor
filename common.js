@@ -79,9 +79,14 @@ function replaceTextNode(textNode, start, end, newClass) {
 				var fragment = document.createDocumentFragment();
 				var incr = 0;
 				if (isInClass(textNode.parentNode, newClass)){
+					if (start > 0) {
+						incr = 5;
+					} else {
+						incr = 4;
+					}
 					return { 
 						fragment: textNode,
-						inc: 1
+						inc: incr
 					}
 				}
 				if (start > 0) {
@@ -163,11 +168,13 @@ function decorateUserHighlight(newClass){
 			//amikor csak egy textnodeon belul jeloltuk ki a szoveget
 			***************************/
 				var fragment = replaceTextNode(actelement.childNodes[a], start, cntr, newClass);
-				if (fragment.inc == 1 && !isInClass(actelement, newClass)) {		//ha egyet nott, akkor ha nincs a szulonek olyan osztalya, akkor hozzavesszuk, egyebkent meg uj elem.
-					actelement.className += " " + newClass;
+				if (fragment.inc > 3 && !isInClass(actelement, newClass)) {		//ha egyet nott, akkor ha nincs a szulonek olyan osztalya, akkor hozzavesszuk, egyebkent meg uj elem.
+								actelement.className += " " + newClass;
 				} else {
 					actelement.replaceChild(fragment.fragment, actelement.childNodes[a]);
 				}
+				var i_text = document.getElementsByName("inserted");
+				i_text[0].setAttribute("name", "");
 			} else {
 				/*************************
 				//ha hosszabb mezot jeloltunk ki mint a kezdo szovegmezo hossza, akkor az elso mezot ket reszre bentjuk, az elso fele marad kijeloletlen
@@ -178,6 +185,9 @@ function decorateUserHighlight(newClass){
 				if (!isInClass(actelement, newClass)) {
 					actelement.replaceChild(fragment.fragment, actelement.childNodes[a]);
 				}
+				if (fragment.inc > 3) {
+					fragment.inc -= 3;	
+				}
 				a += fragment.inc;
 				b = a;
 				var acte = actelement.childNodes[a];
@@ -185,7 +195,12 @@ function decorateUserHighlight(newClass){
 				//Elso blokk ket lehetosege utan vegignezzuk a maradek blokkokat a maradek karakterekert  
 				*************************/
 				while (cntr - start > 0) {
-					var nextText = findNextTextNode(actelement.childNodes[b]);
+					if (actelement.childNodes[b]) {
+						var nextText = findNextTextNode(actelement.childNodes[b]);
+					} else {
+						actelement.childNodes[b-1].parentNode.setAttribute("name", "inserted");
+						var nextText = findNextTextNode(actelement.childNodes[b-1]);
+					}
 					var parentelement = nextText.parentNode;
 					var index = -1;
 					//mivel removechild utan elveszett a node igy most valahogy megkeressuk.
@@ -196,6 +211,7 @@ function decorateUserHighlight(newClass){
 					if (nextText.nodeValue.length < cntr - start) {
 						if (isInClass(nextText.parentNode, newClass)) {
 							cntr = cntr - nextText.nodeValue.length;
+							nextText.parentNode.setAttribute("name", "inserted");
 						} else {
 							if (nextText.parentNode.tagName == "SPAN") {
 								nextText.parentNode.className += " " + newClass;
@@ -213,88 +229,6 @@ function decorateUserHighlight(newClass){
 						cntr = 0;
 					}
 				}
-				/*while (cntr - start > 0) {
-					if(actelement.childNodes[b]) {
-						for (b = a; b < actelement.childNodes.length; b++) {
-							if (actelement.childNodes[b].nodeType == 3){
-								if (actelement.childNodes[b].nodeValue.length < cntr - start) {
-									if (isInClass(actelement, newClass)) {
-										cntr = cntr - actelement.childNodes[b].nodeValue.length;
-									} else {
-										if (actelement.tagName == "SPAN") {
-											actelement.className += " " + newClass;
-											cntr = cntr - actelement.childNodes[b].nodeValue.length;
-											b++
-										} else {
-											var fragment = replaceTextNode(actelement.childNodes[b], 0, actelement.childNodes[b].nodeValue.length, newClass);
-											cntr = cntr - actelement.childNodes[b].nodeValue.length;
-											actelement.replaceChild(fragment.fragment, actelement.childNodes[b]);
-											b += fragment.inc;
-										}
-									}
-								} else {
-									var fragment = replaceTextNode(actelement.childNodes[b], 0, cntr - start, newClass);
-									actelement.replaceChild(fragment.fragment, actelement.childNodes[b]);
-									cntr = 0;
-									b = actelement.childNodes.length + 1;
-								}
-							} else {
-								//Itt kell vizsgalni, hoogy ha nem text node van, akkor melyik az elso gyerek nodja, ami text
-								actelement = actelement.1childNodes[b];
-								b = 0;
-								a = 0;
-							}
-						}
-					} else {
-						var parentelement = actelement.parentNode;
-						var index = -1;
-						if (actelement.nodeType == 3) {
-							//mivel removechild utan elveszett a node igy most valahogy megkeressuk.
-							for (var e = 0; e < parentelement.childNodes.length; e++) {
-								if (parentelement.childNodes[e] === actelement)
-									index = e;
-							}
-							if (actelement.nodeValue.length < cntr - start) {
-								if (isInClass(actelement.parentNode, newClass)) {
-									cntr = cntr - actelement.nodeValue.length;
-								} else {
-									if (actelement.parentNode.tagName == "SPAN") {
-										actelement.parentNode.className += " " + newClass;
-										cntr = cntr - actelement.nodeValue.length;
-									} else {
-										var fragment = replaceTextNode(actelement, 0, actelement.nodeValue.length, newClass);
-										cntr = cntr - actelement.nodeValue.length;
-										if (actelement.parentNode)
-											actelement.parentNode.replaceChild(fragment.fragment, actelement);
-									}
-								}
-							} else {
-								var fragment = replaceTextNode(actelement, 0, cntr - start, newClass);
-								if (actelement.parentNode)
-									actelement.parentNode.replaceChild(fragment.fragment, actelement);
-								cntr = 0;
-							}
-							actelement = parentelement.childNodes[index]
-							parentelement = actelement.parentNode;
-						}
-						a = 0;
-						b = 0;
-						var found = false;
-						while (found == false) {
-							for (var c = 0; c < parentelement.childNodes.length; c++) {
-								if (parentelement.childNodes[c] === actelement) {
-									if (!parentelement.childNodes[c+1]) {
-										actelement = actelement.parentNode;
-									} else {
-										actelement = parentelement.childNodes[c+1];
-										c = parentelement.childNodes.length + 1;
-										found = true;
-									}
-								}
-							}
-						}
-					}
-				}*/
 				return;
 			}
 		}

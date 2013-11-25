@@ -111,3 +111,23 @@ function convertTextHtmlFormat(text) {
 	}
 	return myOutput;
 }
+function preSaveFormat(text) {
+	var myInput = text;
+	var myOutput = '';
+	for (i = 0; i < myInput.length; i++) {
+		var curChar = (myInput.charAt(i));
+		if (curChar == '<') {
+			charCode = 'lt';
+			myOutput +=  '&' + charCode + ';';
+		}
+		if (curChar == '>') {
+			charCode = 'gt';
+			myOutput += '&' + charCode + ';';
+		}
+		if ((curChar != '<') && (curChar != '>')) {
+			charCode = curChar;
+			myOutput += charCode;
+		}
+	}
+	return myOutput;
+}

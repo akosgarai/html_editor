@@ -88,3 +88,7 @@ h1 {
 .italic {
 	font-style: italic;
 }
+.error {
+	background-color: white;
+	color: red;
+}
