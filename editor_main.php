@@ -39,15 +39,14 @@ function selector($pageContent = NULL) {
 		$smarty->assign('title', 'HTML Editor');
 		$smarty->assign('main_screen', 'Ez itt a html editor kezdokepernyoje.');
 		$smarty->assign('menus', array('HTML', 'Tag Cont', 'Save'));
-		$smarty->assign('pageContent', $pageContent);
 		$smarty->assign('bgColorSelectorModule', $bgColorSelectorModule);
 		$smarty->assign('fontColorSelectorModule', $fontColorSelectorModule);
 		$smarty->assign('errors', $errors);
 		if($pageContent == NULL){
 			$smarty->assign('initScript', 'changescript("")');
 		} else {
-			$pageContent = str_replace('quot;', '', $pageContent);
-			$smarty->assign('initScript', 'changescript("'.$pageContent.'")');
+			$pageContent = htmlspecialchars_decode($pageContent);
+			$smarty->assign('pageContent', $pageContent);
 		}
 		$smarty->display('template/editor_main.tpl');
 }
