@@ -127,3 +127,38 @@ h1 {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
+.module {
+	background-color:	#333333;
+	border: 2px solid black;
+}
+.modulname {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	height: 20px;
+	width: 190px;
+	background-color:	#878787;
+	text-align: center;
+}
+.module-content-container {
+	display: none;
+	padding-bottom: 5px;
+	height: 250px;
+}
+.repeat-selector-left {
+	float: left;
+	width: 50%;
+	font-size: 12px;
+}
+.double {
+	float: left;
+	width: 50%;
+}
+.triple {
+	float: left;
+	width: 33%;
+}
+.doubletriple {
+	float: left;
+	width: 67%;
+}

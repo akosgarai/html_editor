@@ -206,11 +206,24 @@ function changeColor(element) {
 	document.getElementById("editor-box").firstChild.style.color = color.value;
 }
 
-function setBgImage(src) {
+function getSelectedOption(select) {
+	for (var a = 0; a < select.childNodes.length; a++) {
+		if (select.childNodes[a].selected) return select.childNodes[a];
+	}
+}
+function setBgImage(select) {
+	var element = getSelectedOption(select);
+	var src = element.value;
+	var meta = getMeta(src);
 	document.getElementById("editor-box").firstChild.style.backgroundImage = "url(" + src + ")";
 	document.getElementById("editor-box").firstChild.style.backgroundRepeat = "no-repeat";
+	document.getElementById("editor-box").firstChild.style.minWidth = meta.imageWidth;
+	document.getElementById("editor-box").firstChild.style.minHeight = meta.imageHeight;
+	document.getElementById("bg-image-modul").style.display = block;
 }
-function insertImage(src) {
+function insertImage(select) {
+	var element = getSelectedOption(select);
+	var src = element.value;
 	var imgCont = document.createElement("div");
 	imgCont.setAttribute("name", "editor-element");
 	var img = document.createElement("img");
@@ -228,4 +241,27 @@ function uploadImage(element) {
 		alert (form.innerHTML);
 		form.submit();
 	}
+}
+
+function changeVisibility(element) {
+	if(element.style.display == "none" || element.style.display == "") {
+		element.style.display = "block";
+	} else {
+		element.style.display = "none";
+	}
+}
+function setStyleValueSelect(element) {
+	var property = element.id;
+	var value = getSelectedOption(element);
+	var fs = document.getElementById("editor-box").firstChild.style;
+	fs[property] = value.value;
+}
+function updateFontSize(element) {
+	var property = element.id;
+	var num = element.childNodes[0].childNodes[0].value;
+	var ext = getSelectedOption(element.childNodes[1].childNodes[0]);
+	var fs = document.getElementById("editor-box").firstChild.style;
+	var value = num.toString();
+	value = value.concat(ext);
+	fs[property] = num + ext.value;
 }

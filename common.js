@@ -237,3 +237,12 @@ function decorateUserHighlight(newClass){
 function getSelectionHtml(cName) {
 decorateUserHighlight(cName);
 }
+//kepek meretet szedi ossze, ha backgroundba kerul
+function getMeta(src) {
+	var image = document.createElement("img");
+	image.src = src;
+	return {
+		imageWidth: image.width,
+		imageHeight: image.height
+	}
+}

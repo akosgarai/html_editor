@@ -28,10 +28,8 @@
 			<div id="editor-box" class="editor">{$pageContent}</div>
 		</div>
 		<div id="style-menu">
-		{$bgColorSelectorModule}<br />
-		{$fontColorSelectorModule}<br />
-		{$uploadImageModule}<br />
-		{$listImageModule}
+		{$backgroundModule}
+		{$textModule}
 		</div>
 		<script type="text/javascript">
 			{$initScript}
