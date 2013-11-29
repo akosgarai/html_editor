@@ -38,6 +38,13 @@ function createSelectSubmodule($values, $submoduleId, $labelText, $cssProperty, 
 	}
 	$module .= "</select></div></div>";
 	return $module;
-	
+}
+function createNumericSubmodule($submoduleId, $labelText, $cssProperty, $values) {
+	$module = "<div id=\"$submoduleId-submodule\"><div class=\"triple pointer button\" onclick=\"setStyleValueNumeric(this.parentNode)\"><p>$labelText</p></div><div class=\"doubletriple\"><div class=\"double\"><input type=\"number\" name=\"$cssProperty-numeric\" id=\"$cssProperty-numeric\" style=\"max-width:50px;\"/></div><div class=\"double\"><select id=\"$cssProperty\">";
+	foreach ($values as $v) {
+		$module .= "<option value=\"$v\">$v</option>";
+	}
+	$module .= "</select></div></div></div>";
+	return $module;
 }
 ?>

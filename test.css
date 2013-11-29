@@ -162,3 +162,28 @@ h1 {
 	float: left;
 	width: 67%;
 }
+.pointer {
+	cursor:pointer;
+}
+.button {
+	background-color: #123456;
+	width: 50px;
+	margin: 4px 5px 0 5px;
+	height: 20px;
+	float: left;
+	text-align: center;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.longbutton {
+	background-color: #123456;
+	width: 90%;
+	margin: 4px 5px 0 5px;
+	height: 20px;
+	float: left;
+	text-align: center;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}

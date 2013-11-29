@@ -265,3 +265,10 @@ function updateFontSize(element) {
 	value = value.concat(ext);
 	fs[property] = num + ext.value;
 }
+function setStyleValueNumeric(element) {
+	var value = element.childNodes[1].childNodes[0].childNodes[0].value;
+	var select = getSelectedOption(element.childNodes[1].childNodes[1].childNodes[0]);
+	var property = element.childNodes[1].childNodes[1].childNodes[0].id;
+	var fs = document.getElementById("editor-box").firstChild.style;
+	fs[property] = value + select.value;
+}

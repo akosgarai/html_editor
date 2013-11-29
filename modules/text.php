@@ -1,18 +1,16 @@
 <?php 
 class textModule {
 
-function fontSize() {
-	$values = array('pt', 'px', '%');
-	$module = "<div id=\"font-size-submodule\"><div class=\"triple\"><label>FontSize</label></div><div id=\"fontSize\" class=\"doubletriple\"><div class=\"double\"><input type=\"number\" name=\"size\" id=\"size\" style=\"max-width:50px;\"/></div><div class=\"double\"><select id=\"font-size-value\" onchange=\"updateFontSize(this.parentNode.parentNode)\">";
-	foreach ($values as $v) {
-		$module .= "<option value=\"$v\">$v</option>";
+	function textShadowSubmodule() {
+		$module = "<div id=\"text-shadow-submodule\"><div class=\"pointer longbutton\" onclick=\"\"><p>Shadow<p></div><div class=\"double\"><div class=\"triple\"><label>H</label></div><input type=\"number\" name=\"h-numeric\" id=\"\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>V</label></div><input type=\"number\" name=\"v-numeric\" id=\"v-numeric\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>Blur</label></div><input type=\"number\" name=\"v-numeric\" id=\"v-numeric\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>#</label></div><input type=\"text\" name=\"numeric\" id=\"c-numeric\" style=\"max-width:50px;\"/></div></div>";
+	//	$module = "<div><p>Shadow</p></div>";
+		return $module;
 	}
-	$module .= "</select></div></div></div>";
-	return $module;
-}
+	
 	function createTextModule() {
 		$module = generateModuleContainer("textModule", "Szoveg");
-		$fsize = $this->fontSize();
+		//$fsize = $this->fontSize();
+		$fsize = createNumericSubmodule("font-size", "Size", "fontSize", array('pt', 'px', '%'));
 		$module .= $fsize;
 		$fstyle = createSelectSubmodule(array('normal', 'italic', 'oblique'), "font-style", "FontStyle", "fontStyle", "double", "double");
 		$module .= $fstyle;
@@ -20,8 +18,16 @@ function fontSize() {
 		$module .= $fweight;
 		$talign = createSelectSubmodule(array('left', 'right', 'center', 'justify', 'inherit'), "text-align", "Text align", "textAlign", "double", "double");
 		$module .= $talign;
-		$tdecoration = createSelectSubmodule(array('none', 'underline', 'overline', 'line-through', 'inherit'), "text-decoration", "Text decoration", "textDecoration", "double", "double");
+		$tdecoration = createSelectSubmodule(array('none', 'underline', 'overline', 'line-through', 'inherit'), "text-decoration", "decoration", "textDecoration", "double", "double");
 		$module .= $tdecoration;
+		$ttransform = createSelectSubmodule(array('none', 'capitalize', 'uppercase', 'lowercase', 'inherit'), "text-transform", "Transform", "textTransform", "double", "double");
+		$module .= $ttransform;
+		$tindent = createNumericSubmodule("text-indent", "Indent", "textIndent", array('px', '%'));
+		$module .= $tindent;
+		$wspacing = createNumericSubmodule("word-spacing", "Space", "wordSpacing", array('px', 'pt'));
+		$module .= $wspacing;
+		$tshadow = $this->textShadowSubmodule();
+		$module .= $tshadow;
 		$module .= "</div></div>";
 		return $module;
 	}
