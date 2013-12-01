@@ -65,6 +65,16 @@
 	min-width: 40px;
 	max-width: 40px;
 }
+.numericmenu {
+	min-width: 80px;
+	max-width: 80px;
+	height: 30px;
+	background-color: blue;
+	margin: 0px;
+}
+#num-of-divs {
+	margin: 4px 6px 0px 0px;
+}
 #style-menu {
 	background-color: gray;
 	float: left;
@@ -167,7 +177,7 @@ h1 {
 }
 .button {
 	background-color: #123456;
-	width: 50px;
+	width: 54px;
 	margin: 4px 5px 0 5px;
 	height: 20px;
 	float: left;
@@ -175,6 +185,17 @@ h1 {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+}
+.labelbutton {
+	background-color: #123456;
+	margin: 2px 4px 0 4px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	width: 45%;
+	text-align: center;
+	font-size: 15px;
+	height: 20px;
 }
 .longbutton {
 	background-color: #123456;
@@ -186,4 +207,30 @@ h1 {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+}
+.doublebutton {
+	width: 80px;
+}
+.triplebutton {
+	width: 55px;
+}
+.marginedchildren > div {
+	border: 1px solid black;
+}
+.divcontainer > div {
+	min-width:30px;
+	min-height:30px;
+	float: left;
+}
+#boxModule .module-content-container{
+	height: 400px;
+}
+#textModule .module-content-container{
+	height: 270px;
+}
+#backgroundModule .module-content-container{
+	height: 170px;
+}
+.right {
+	float: right;
 }

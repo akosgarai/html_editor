@@ -32,7 +32,7 @@ function checkImageType($file) {
 	}
 }
 function createSelectSubmodule($values, $submoduleId, $labelText, $cssProperty, $class1, $class2) {
-	$module = "<div id=\"$submoduleId-submodule\"><div class=\"$class1\"><label>$labelText</label></div><div class=\"$class2\"><select id=\"$cssProperty\" onchange=\"setStyleValueSelect(this)\">";
+	$module = "<div id=\"$submoduleId-submodule\"><div class=\"$class1 labelbutton\" onclick=\"changeSelectValue(this.parentNode)\"><p>$labelText</p></div><div class=\"$class2\"><select id=\"$cssProperty\" class=\"right\">";
 	foreach ($values as $v) {
 		$module .= "<option value=\"$v\">$v</option>";
 	}
@@ -45,6 +45,15 @@ function createNumericSubmodule($submoduleId, $labelText, $cssProperty, $values)
 		$module .= "<option value=\"$v\">$v</option>";
 	}
 	$module .= "</select></div></div></div>";
+	return $module;
+}
+function multipleNumericSubmodule($submoduleId, $labelMainText, $label1, $label2, $label3, $label4, $cssProperty) {
+		$module = "<div id=\"$sumoduleId-submodule\"><div id=\"$cssProperty\" class=\"pointer longbutton\" onclick=\"multipleNumeric(this.parentNode)\"><p>$labelMainText<p></div><div class=\"double\"><div class=\"triple\"><label>$label1</label></div><input type=\"number\" name=\"$label1-numeric\" id=\"$label1-numeric\" style=\"max-width:50px;\" value=\"0\"/></div><div class=\"double\"><div class=\"triple\"><label>$label2</label></div><input type=\"number\" name=\"$label2-numeric\" id=\"$label2-numeric\" style=\"max-width:50px;\" value=\"0\"/></div><div class=\"double\"><div class=\"triple\"><label>$label3</label></div><input type=\"number\" name=\"$label3-numeric\" id=\"$label3-numeric\" style=\"max-width:50px;\" value=\"0\"/></div><div class=\"double\"><div class=\"triple\"><label>$label4</label></div><input type=\"number\" name=\"$label4-numeric\" id=\"$label4-numeric\" style=\"max-width:50px;\" value=\"0\"/></div></div>";
+		return $module;
+
+}
+function colorSelectorSubmodule($submoduleId, $labelText, $cssProperty) {
+	$module = "<div id=\"$submoduleId-submodule\"><div class=\"double pointer button doublebutton\" id=\"$cssProperty\" onclick=\"changeColor(this.parenNode)\"><p>$labelText</p></div><div class=\"double\">#<input type=\"text\" name=\"$labelText-numeric\" id=\"$labelText-numeric\" style=\"max-width:50px; float:right;\" /></div></div>";
 	return $module;
 }
 ?>

@@ -23,6 +23,7 @@
 					<div class="hidden-menuitem bigmenu" id="edit-mode" onclick="editModeOn()">Edit</div>
 					<button class="hidden-menuitem smallmenu" id="new-b" onclick="getSelectionHtml('bold')">B</button>
 					<button class="hidden-menuitem smallmenu" id="new-i" onclick="getSelectionHtml('italic')">I</button>
+					{$createDivHiddenMenu}
 				</div>
 			</div>
 			<div id="editor-box" class="editor">{$pageContent}</div>
@@ -30,6 +31,7 @@
 		<div id="style-menu">
 		{$backgroundModule}
 		{$textModule}
+		{$boxModule}
 		</div>
 		<script type="text/javascript">
 			{$initScript}

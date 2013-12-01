@@ -26,7 +26,7 @@ function removeUselessDivs(element) {
 	var result = document.createElement("div");
 	if (typeof(element) == "undefined") { return 3; }
 	//Ha ures es div, akkor visszater 1-el, ha div es nincs id, akkor visszater 2-vel, egyebkent pedig rekurzivan megy a gyerkekre
-	if (element.tagName == "DIV" && element.innerHTML == "") {
+	if (element.tagName == "DIV" && element.innerHTML == "" && element.id == "") {
 		return 1;
 	} else if (element.tagName == "DIV" && element.id == "") {
 		return 2;
@@ -219,7 +219,7 @@ function setBgImage(select) {
 	document.getElementById("editor-box").firstChild.style.backgroundRepeat = "no-repeat";
 	document.getElementById("editor-box").firstChild.style.minWidth = meta.imageWidth;
 	document.getElementById("editor-box").firstChild.style.minHeight = meta.imageHeight;
-	document.getElementById("bg-image-modul").style.display = block;
+//	document.getElementById("bg-image-modul").style.display = block;
 }
 function insertImage(select) {
 	var element = getSelectedOption(select);
@@ -271,4 +271,34 @@ function setStyleValueNumeric(element) {
 	var property = element.childNodes[1].childNodes[1].childNodes[0].id;
 	var fs = document.getElementById("editor-box").firstChild.style;
 	fs[property] = value + select.value;
+}
+function textShadow(element) {
+	var property = element.childNodes[0].id;
+	var sh = element.childNodes[1].childNodes[1].value + "px";
+	var sv = element.childNodes[2].childNodes[1].value + "px";
+	var sb = element.childNodes[3].childNodes[1].value + "px";
+	var sc = "#" + element.childNodes[4].childNodes[1].value;
+	var fs = document.getElementById("editor-box").firstChild.style;
+	fs[property] = sh + " " + sv + " " + sb + " " + sc;
+}
+function multipleNumeric(element) {
+	var property = element.childNodes[0].id;
+	var sh = element.childNodes[1].childNodes[1].value + "px";
+	var sv = element.childNodes[2].childNodes[1].value + "px";
+	var sb = element.childNodes[3].childNodes[1].value + "px";
+	var sc = element.childNodes[4].childNodes[1].value + "px";
+	var fs = document.getElementById("editor-box").firstChild.style;
+	fs[property] = sh + " " + sv + " " + sb + " " + sc;
+}
+function colorSelector(element) {
+	var property =element.childNodes[0].id;
+	var color = element.childNodes[1].childNodes[1].value;
+	var fs = document.getElementById("editor-box").firstChild.style;
+	fs[property] = "#" + color;
+}
+function changeSelectValue(element) {
+	var property = element.childNodes[1].childNodes[0].id;
+	var selected = getSelectedOption(element.childNodes[1].childNodes[0]);
+	var fs = document.getElementById("editor-box").firstChild.style;
+	fs[property] = selected.value;
 }

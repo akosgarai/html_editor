@@ -2,8 +2,7 @@
 class textModule {
 
 	function textShadowSubmodule() {
-		$module = "<div id=\"text-shadow-submodule\"><div class=\"pointer longbutton\" onclick=\"\"><p>Shadow<p></div><div class=\"double\"><div class=\"triple\"><label>H</label></div><input type=\"number\" name=\"h-numeric\" id=\"\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>V</label></div><input type=\"number\" name=\"v-numeric\" id=\"v-numeric\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>Blur</label></div><input type=\"number\" name=\"v-numeric\" id=\"v-numeric\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>#</label></div><input type=\"text\" name=\"numeric\" id=\"c-numeric\" style=\"max-width:50px;\"/></div></div>";
-	//	$module = "<div><p>Shadow</p></div>";
+		$module = "<div id=\"text-shadow-submodule\"><div id=\"textShadow\" class=\"pointer longbutton\" onclick=\"textShadow(this.parentNode)\"><p>Shadow<p></div><div class=\"double\"><div class=\"triple\"><label>H</label></div><input type=\"number\" name=\"h-numeric\" id=\"\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>V</label></div><input type=\"number\" name=\"v-numeric\" id=\"v-numeric\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>Blur</label></div><input type=\"number\" name=\"v-numeric\" id=\"v-numeric\" style=\"max-width:50px;\"/></div><div class=\"double\"><div class=\"triple\"><label>#</label></div><input type=\"text\" name=\"numeric\" id=\"c-numeric\" style=\"max-width:50px;\"/></div></div>";
 		return $module;
 	}
 	

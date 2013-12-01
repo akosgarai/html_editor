@@ -131,3 +131,30 @@ function preSaveFormat(text) {
 	}
 	return myOutput;
 }
+function createDivs() {
+	var number = document.getElementById("num-of-divs").value;
+	if (typeof(number) != "undefined" && number > 0) {
+		var containerDiv = document.createElement("div");
+		containerDiv.setAttribute("name", "editor-element");
+		containerDiv.setAttribute("class", "marginedchildren divcontainer");
+		containerDiv.setAttribute("id", generateId(containerDiv));
+		for (var a = 0; a < number; a++) {
+			var child = document.createElement("div");
+			var dec = (number/5);
+			child.setAttribute("name", "editor-element");
+			child.setAttribute("id", generateId(child));
+			child.style.minWidth = (100-dec)/number + "%";
+			child.style.maxWidth = (100-dec)/number + "%";
+			containerDiv.appendChild(child);
+		}
+		var editorBox = document.getElementById("editor-box");
+		if (editorBox.childNodes[0]) {
+			editorBox.getElementsByTagName("DIV")[0].appendChild(containerDiv);
+		} else {
+			editorBox.appendChild(document.createElement("div"));
+			editorBox.childNodes[0].setAttribute("id", generateId(editorBox.childNodes[0]));
+			editorBox.childNodes[0].setAttribute("name", "editor-element");
+			editorBox.childNodes[0].appendChild(containerDiv);
+		}
+	}
+}
