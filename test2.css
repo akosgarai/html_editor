@@ -214,9 +214,6 @@ h1 {
 .triplebutton {
 	width: 55px;
 }
-.marginedchildren > div {
-	border: 1px solid black;
-}
 .divcontainer > div {
 	min-width:30px;
 	min-height:30px;
@@ -293,4 +290,7 @@ h1 {
 	width: 11%;
 	float: left;
 	display: block;
+}
+.addbutton {
+	display: none;
 }

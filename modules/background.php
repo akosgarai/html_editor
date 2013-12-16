@@ -45,6 +45,7 @@ class backgroundModule {
 		$fcolor = colorSelectorSubmodule("color", "Color", "color");
 		$module .= $fcolor;
 		$listIm = $this->listImageModule();
+		$module .= $listIm;
 		$bgrepeat = createSelectSubmodule(array('no-repeat', 'repeat', 'repeat-x', 'repeat-y'), "background-repeat", "Bg-Repeat", "backgroundRepeat", "double", "double");
 		$module .= $bgrepeat;
 		$bgPos = $this->backgroundPosition();

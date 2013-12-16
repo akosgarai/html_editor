@@ -81,12 +81,26 @@ function showHtml(pageContent) {
 		alert(typeof(pageContent));
 		var	text = pageContent;
 	} else {
+		var toChange = document.getElementsByClassName("replaceToA");
+		for (var j = 0; j < toChange.length; j++) {
+			var ch = document.createElement("a");
+			ch.innerHTML = toChange[j].innerHTML;
+			var href = toChange[j].getAttribute("name");
+			if (href.substr(-6) == "_blank") {
+				ch.target = "_blank";
+				href = href.substr(0, href.length - 6);
+			}
+			ch.href = href;
+			ch.setAttribute("class", "replaceToP");
+			//toChange[j].setAttribute("tagName", "a");
+			toChange[j].parentNode.replaceChild(ch, toChange[j]);
+		}
 			var text = document.getElementById('editor-box').innerHTML;
 	}
 	var result = convertTextHtmlFormat(text);
 	if (document.getElementById('html_menu').getAttribute("name") != "active") {
 		htmlView();
-		if(elementInEditor != null) {
+		if(elementInEditor != null) { 
 			document.getElementById('editor-box').innerHTML = elementInEditor;
 			document.getElementsByName('selected_element')[0].innerHTML = result;
 			document.getElementsByName('selected_element')[0].setAttribute("name", "");
@@ -139,7 +153,8 @@ function insertText(text) {
 			element.firstChild.appendChild(pp);
 		}
 	} else if(typeof(text) == "object" && text.id == "new-h") {
-		var pp = document.createElement("h1");
+		var num = text.childNodes[1].childNodes[0].value;
+		var pp = document.createElement("h" + num);
 		pp.setAttribute("name", "editor-elem");
 		pp.setAttribute("onclick", "editorFunction(this)");
 		pp.appendChild(txt);
@@ -155,6 +170,15 @@ function insertText(text) {
 			element.appendChild(dn1);
 			element.firstChild.appendChild(pp);
 		}
+	} else if (typeof(text) == "object" && text.className == "addbutton") {
+		text.parentNode.replaceChild(txt, text);
+		txt.parentNode.appendChild(finished);
+		txt.parentNode.appendChild(cancel);
+		txt.parentNode.setAttribute("onclick", "editorFunction(this)");
+		var next = createListAdd();
+		txt.parentNode.parentNode.appendChild(next);
+	} else if (typeof(text) == "object" && text.className == "replaceToA") {
+		insertUrl(text);
 	} else {
 		if (typeof(text) != "undefined" && text != "") { txt.innerHTML = text.innerHTML; }
 		text.innerHTML = "";
@@ -163,7 +187,183 @@ function insertText(text) {
 		text.appendChild(cancel);
 	}
 }
-
+function createListAdd() {
+	var add = document.createElement("div");
+	add.setAttribute("class", "addbutton");
+	add.setAttribute("id", "list-add-button");
+	add.setAttribute("onclick", "insertText(this)");
+	add.innerHTML = "+1";
+	var result = document.createElement("li");
+	result.appendChild(add);
+	return result;
+}
+function createList(element) {
+	var type = getSelectedOption(element.childNodes[1]);
+	var list;
+	var cssRule = element.childNodes[0].value;
+	if (type.innerHTML == "ol") {
+		list = document.createElement("ol");
+	} else if (type.innerHTML == "ul") {
+		list = document.createElement("ul");
+	}
+	list.setAttribute("class", "list");
+	switch (cssRule) {
+		case "1": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-one");
+			break;
+		case "2": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-two");
+			break;
+		case "3": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-three");
+			break;
+		case "4": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-four");
+			break;
+		case "5": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-five");
+			break;
+		case "6": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-six");
+			break;
+		case "7": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-seven");
+			break;
+		case "8": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-eight");
+			break;
+		case "9": 
+			list.setAttribute("class", list.getAttribute("class") + " " + "list-nine");
+			break;
+	}
+	var lie = createListAdd();
+	list.appendChild(lie);
+	element.parentNode.replaceChild(list, element);
+}
+function createOption(value, text) {
+	var option = document.createElement("option");
+	option.setAttribute("name", "editor-elem");
+	option.setAttribute("value", value);
+	option.innerHTML = text;
+	return option;
+}
+function insertList(element) {
+	//egyszerre csak egy szovegmezot lehet szerkeszteni
+	if(document.getElementById("editorTextInputField")) {
+		alert("Egyszerre egy mezot szerkeszthetsz!");
+		return;
+	}
+	hiddenMenusOff();
+	document.getElementById('new-text').style.backgroundColor="green";
+	editMode = false;
+	var listForm = document.createElement("div");
+	listForm.setAttribute("name", "editor-elem");
+	listForm.setAttribute("id", "editorTextInputField");
+	listForm.setAttribute("class", "listform");
+	var cssRule = element.childNodes[1].childNodes[0].value;
+	var hinput = document.createElement("input");
+	hinput.setAttribute("type", "hidden");
+	hinput.setAttribute("value", cssRule);
+	listForm.appendChild(hinput);
+	var listType = document.createElement("select");
+	var options = createOption("ol", "ol");
+	listType.appendChild(options);
+	options = createOption("ul", "ul");
+	listType.appendChild(options);
+	listForm.appendChild(listType);
+	var okbtn = document.createElement("button");
+	okbtn.setAttribute("type", "button");
+	okbtn.innerHTML = "Ok";
+	okbtn.setAttribute("onclick", "createList(this.parentNode)");
+	var removebtn = document.createElement("button");
+	removebtn.setAttribute("type", "button");
+	removebtn.innerHTML = "Cancel";
+	removebtn.setAttribute("onclick", "removeParent(this)");
+	listForm.appendChild(okbtn);
+	listForm.appendChild(removebtn);
+	document.getElementById("editor-box").firstChild.appendChild(listForm);
+}
+//uj url beszurasa modul
+function constructUrl(element) {
+	var text = element.childNodes[1].value;
+	var url = element.childNodes[3].value;
+	if (text == "" || url == "") {
+		return;
+	}
+	var result = document.createElement("p");
+	result.setAttribute("name", url);
+	if (element.childNodes[5].checked) {
+		result.setAttribute("name", url + "_blank");
+	}
+	result.setAttribute("class", "replaceToA");
+	result.setAttribute("onclick", "editorFunction(this)");
+	result.innerHTML = text;
+	element.parentNode.replaceChild(result, element);
+}
+function insertUrl(element) {
+	//egyszerre csak egy szovegmezot lehet szerkeszteni
+	if(document.getElementById("editorTextInputField")) {
+		alert("Egyszerre egy mezot szerkeszthetsz!");
+		return;
+	}
+	hiddenMenusOff();
+	document.getElementById('new-text').style.backgroundColor="green";
+	editMode = false;
+	var urlForm = document.createElement("div");
+	urlForm.setAttribute("name", "editor-elem");
+	urlForm.setAttribute("id", "editorTextInputField");
+	urlForm.setAttribute("class", "urlform");
+	var labelText = document.createElement("label")
+	labelText.setAttribute("for", "displayText");
+	labelText.innerHTML = "Text: ";
+	var displayText = document.createElement("input");
+	displayText.setAttribute("name", "displayText");
+	displayText.setAttribute("id", "displayText");
+	displayText.style.width = "200px";
+	urlForm.appendChild(labelText);
+	urlForm.appendChild(displayText);
+	var labelUrl = document.createElement("label")
+	labelUrl.setAttribute("for", "urlText");
+	labelUrl.innerHTML = "URL:"
+	var urlText = document.createElement("input");
+	urlText.setAttribute("name", "urlText");
+	urlText.setAttribute("id", "urlText");
+	urlText.setAttribute("type", "text");
+	urlText.style.width = "200px";
+	urlForm.appendChild(labelUrl);
+	urlForm.appendChild(urlText);
+	var labelnt = document.createElement("label");
+	labelnt.setAttribute("for", "newtab");
+	labelnt.innerHTML = "New tab:";
+	var newtab = document.createElement("input");
+	newtab.setAttribute("type", "checkbox");
+	newtab.setAttribute("name", "newtab");
+	newtab.setAttribute("id", "newtab");
+	urlForm.appendChild(labelnt);
+	urlForm.appendChild(newtab);
+	var okbtn = document.createElement("button");
+	okbtn.setAttribute("type", "button");
+	okbtn.innerHTML = "Ok";
+	okbtn.setAttribute("onclick", "constructUrl(this.parentNode)");
+	var removebtn = document.createElement("button");
+	removebtn.setAttribute("type", "button");
+	removebtn.innerHTML = "Cancel";
+	removebtn.setAttribute("onclick", "removeParent(this)");
+	urlForm.appendChild(removebtn);	
+	urlForm.appendChild(okbtn);	
+	if (typeof (element) != "undefined") {
+		displayText.setAttribute("value", element.innerHTML);
+		var url = element.getAttribute("name");
+		if (url.substr(-6) == "_blank") {
+			newtab.checked = "true";
+			url = url.substr(0, url.length - 6);
+		}
+		urlText.setAttribute("value", url);
+		element.parentNode.replaceChild(urlForm, element);
+	} else {
+		document.getElementById("editor-box").firstChild.appendChild(urlForm);
+	}
+}
 //felpakolja az onclick esemenyt a p, h* tagekre, ha edit modba valtunk
 function onclickToTexts() {
 	if(editMode) {
@@ -173,7 +373,6 @@ function onclickToTexts() {
 		}
 	}
 }
-
 //editor modba valtas, az edit gomb lenyomasa
 function editModeOn() {
 	if(document.getElementById("editorTextInputField")){
@@ -202,8 +401,10 @@ function changeBgColor(element) {
 }
 
 function changeColor(element) {
-	var color =  element.options[element.selectedIndex];
-	document.getElementById("editor-box").firstChild.style.color = color.value;
+	var property = element.childNodes[0].id;
+	var color =  element.childNodes[1].childNodes[1].value;
+	var fs = document.getElementById("editor-box").firstChild.style; 
+	fs[property] = "#" + color;
 }
 
 function getSelectedOption(select) {
@@ -271,6 +472,10 @@ function setStyleValueNumeric(element) {
 	var property = element.childNodes[1].childNodes[1].childNodes[0].id;
 	var fs = document.getElementById("editor-box").firstChild.style;
 	fs[property] = value + select.value;
+	if (property == "width" || property == "height") {
+		fs["min-" + property] = "";
+		fs["max-" + property] = "";
+	}
 }
 function textShadow(element) {
 	var property = element.childNodes[0].id;
@@ -294,7 +499,11 @@ function colorSelector(element) {
 	var property =element.childNodes[0].id;
 	var color = element.childNodes[1].childNodes[1].value;
 	var fs = document.getElementById("editor-box").firstChild.style;
-	fs[property] = "#" + color;
+	if (typeof (color) == "undefined" || color == "") {
+		fs[property] = "transparent";
+	} else {
+		fs[property] = "#" + color;
+	}
 }
 function changeSelectValue(element) {
 	var property = element.childNodes[1].childNodes[0].id;
@@ -302,3 +511,4 @@ function changeSelectValue(element) {
 	var fs = document.getElementById("editor-box").firstChild.style;
 	fs[property] = selected.value;
 }
+

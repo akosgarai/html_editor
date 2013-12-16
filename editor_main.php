@@ -31,10 +31,10 @@ if (array_key_exists("saved_pages", $_POST)) {
 	}
 	$l = $load->loadPage($_POST['saved_pages']);
 	$row = mysql_fetch_assoc($l);
-	var_dump($row);
+	//var_dump($row);
 	selector($row[page_content]);
 }
-/************+
+/************
 Upload image
 ************/
 if (isset($_GET["action"]) && $_GET["action"] == "upload") {
@@ -52,8 +52,17 @@ if (isset($_GET["action"]) && $_GET["action"] == "upload") {
 			addMessage("image Uploaded");
 		}
 	}
-	var_dump($_POST);
+	//var_dump($_POST);
 	selector($_POST["saveEditorContent"]);
+}
+function createHHiddenMenu() {
+		$hiddenMenu = "<div class=\"hidden-menuitem numericmenu\" id=\"new-h\"><div class=\"double\" onclick=\"insertText(this.parentNode)\">H</div><div class=\"double\"><input type=\"number\" name=\"num-of-h\" id=\"num-of-h\" style=\"width:35px;\" min=\"1\" max=\"7\" / ></div></div>";
+		return $hiddenMenu;
+}
+function createListHiddenMenu() {
+		$hiddenMenu = "<div class=\"hidden-menuitem numericmenu\" id=\"new-list\"><div class=\"double\" onclick=\"insertList(this.parentNode)\">List</div><div class=\"double\"><input type=\"number\" name=\"num-of-row\" id=\"num-of-row\" style=\"width:35px;\" min=\"1\" max=\"9\"/ ></div></div>";
+		return $hiddenMenu;
+
 }
 function selector($pageContent = NULL) {
 	$smarty = new Smarty;
@@ -61,11 +70,15 @@ function selector($pageContent = NULL) {
 	$backgroundModule = new backgroundModule;
 	$textModule = new textModule;
 	$boxModule = new boxModule;
+	$HHMenu = createHHiddenMenu();
+	$LMenu = createListHiddenMenu();
 
 		$smarty->assign('title', 'HTML Editor');
 		$smarty->assign('main_screen', 'Ez itt a html editor kezdokepernyoje.');
 		$smarty->assign('menus', array('HTML', 'Tag Cont', 'Save'));
 		$smarty->assign('messages', $messages);
+		$smarty->assign('createHHiddenMenu', $HHMenu);
+		$smarty->assign('createListHiddenMenu', $LMenu);
 		$smarty->assign('backgroundModule', $backgroundModule->createBackgroundModule());
 		$smarty->assign('textModule', $textModule->createTextModule());
 		$smarty->assign('boxModule', $boxModule->createBoxModule());

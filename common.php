@@ -53,7 +53,7 @@ function multipleNumericSubmodule($submoduleId, $labelMainText, $label1, $label2
 
 }
 function colorSelectorSubmodule($submoduleId, $labelText, $cssProperty) {
-	$module = "<div id=\"$submoduleId-submodule\"><div class=\"double pointer button doublebutton\" id=\"$cssProperty\" onclick=\"changeColor(this.parenNode)\"><p>$labelText</p></div><div class=\"double\">#<input type=\"text\" name=\"$labelText-numeric\" id=\"$labelText-numeric\" style=\"max-width:50px; float:right;\" /></div></div>";
+	$module = "<div id=\"$submoduleId-submodule\"><div class=\"double pointer button doublebutton\" id=\"$cssProperty\" onclick=\"changeColor(this.parentNode)\"><p>$labelText</p></div><div class=\"double\">#<input type=\"text\" name=\"$labelText-numeric\" id=\"$labelText-numeric\" style=\"max-width:50px; float:right;\" /></div></div>";
 	return $module;
 }
 ?>

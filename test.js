@@ -30,6 +30,7 @@ function numOfActiveInputFields(name) {
 
 function changescript(text, element) {
 	if(document.getElementById('tag_cont_menu').getAttribute("name") != "active") {
+		
 			if(typeof(element) != "undefined") { 
 				element.setAttribute("name", "selected_element"); 
 				elementInEditor = document.getElementById('editor-box').innerHTML;
@@ -43,6 +44,15 @@ function changescript(text, element) {
 			}
 			 clickableElementsIdNull(document.getElementById('editor-box'));
 			 removeUselessDivs(document.getElementById('editor-box'));
+			var change = document.getElementsByClassName("replaceToP"); 
+			for (var c = 0; c < change.length; c++) {
+				var ch = document.createElement("p");
+				ch.setAttribute("name", change[c].href + change[c].target);
+				ch.setAttribute("class", "replaceToA");
+				ch.setAttribute("onclick", "editorFunction(this)");
+				ch.innerHTML = change[c].innerHTML;
+				change[c].parentNode.replaceChild(ch, change[c]);
+			}
 	}
 }
 function convertHtmlTextFormat(text) {

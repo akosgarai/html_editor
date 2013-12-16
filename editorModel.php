@@ -70,5 +70,48 @@ class editorModel {
 			return $result;
 		}
 	}
+	function loadHeaderFooter() {
+		$query = "SELECT content, name FROM predefined_elements WHERE name IN ('header', 'footer')";
+		$result = mysql_query($query, $this->cid);
+		if (!$result) {
+			return "ERROR_LOADING_HEADER_FOOTER, query: ".$query." errormsg: ".mysql_error();
+		} else {
+			return $result;
+		}
+	}
+	function releasePage($page_id) {
+		$page_content = $this->loadPage($page_id);
+		$footer_header = $this->loadHeaderFooter();
+		$final_page = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"../test2.css\"></head><body>";
+		$url = "released/page.html";
+		$footer;
+		$header;
+		if (substr($footer_header, 0, 5) == "ERROR") {
+			return $footer_header;
+		} else {
+			while ($row = mysql_fetch_assoc($footer_header)) {
+				if ($row["name"] == "header") {
+					$header = htmlspecialchars_decode($row["content"]);
+				}
+				if ($row["name"] == "footer") {
+					$footer = htmlspecialchars_decode($row["content"]);
+				}
+			}
+		}
+		$final_page .= $header."<br />";
+		if (substr($page_content, 0, 5) == "ERROR") {
+			return $page_content;
+		} else if (sizeof($page_content) == 1){
+			while ($row = mysql_fetch_assoc($page_content)){
+				$final_page .= htmlspecialchars_decode($row["page_content"]);
+			}
+		} else {
+			return "ERROR_PARA_VAN";
+		}
+		$final_page .= "<br />".$footer."</body></html>";
+		file_put_contents($url, $final_page);
+		$url = "localhost/smarty_stuff/".$url;
+		return $url;
+	}
 }
 ?>
