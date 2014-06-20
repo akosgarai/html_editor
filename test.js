@@ -37,7 +37,6 @@ function changescript(text, element) {
 			}
 			text = convertHtmlTextFormat(text);
 			menuButtonActivator("tag_cont_menu");
-			//TagContView();
 			document.getElementById('editor-box').innerHTML = text;
 			var changeOnClickInTmp_Object = getElementByClassName("tmp_object");
 			for (var a = 0; a < changeOnClickInTmp_Object.length; a++) {

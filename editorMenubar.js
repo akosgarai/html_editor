@@ -1,19 +1,3 @@
-//menusorban a megfelelo gombok szinezese
-function TagContView() {
-	document.getElementById('html_menu').setAttribute("name", "");
-	document.getElementById('html_menu').style.backgroundColor="#123456";
-	document.getElementById('tag_cont_menu').style.backgroundColor="green";
-	document.getElementById('tag_cont_menu').setAttribute("name", "active");
-	document.getElementById('hidden-menu').style.display = "block";
-}
-
-function htmlView(){
-	document.getElementById('html_menu').setAttribute("name", "active");
-	document.getElementById('html_menu').style.backgroundColor="green";
-	document.getElementById('tag_cont_menu').style.backgroundColor="#123456";
-	document.getElementById('tag_cont_menu').setAttribute("name", "");
-	document.getElementById('hidden-menu').style.display = "none";
-}
 /*menuButtonActiveHandler function 
 *	lekezeli, hogy melyik gombot nyomtuk meg, azt aktivva teszi, a tobbirol pedig leveszi az aktiv classt illetve kirakja vagy eltunteti a hidden-menusort.
 */
@@ -113,7 +97,6 @@ function showHtml(pageContent) {
 	var result = convertTextHtmlFormat(text);
 	if (document.getElementById('html_menu').getAttribute("name") != "active") {
 		menuButtonActivator("html_menu");
-		//htmlView();
 		if(elementInEditor != null) { 
 			document.getElementById('editor-box').innerHTML = elementInEditor;
 			document.getElementsByName('selected_element')[0].innerHTML = result;
