@@ -14,7 +14,20 @@ function htmlView(){
 	document.getElementById('tag_cont_menu').setAttribute("name", "");
 	document.getElementById('hidden-menu').style.display = "none";
 }
-
+/*menuButtonActiveHandler function 
+*	lekezeli, hogy melyik gombot nyomtuk meg, azt aktivva teszi, a tobbirol pedig leveszi az aktiv classt illetve kirakja vagy eltunteti a hidden-menusort.
+*/
+function menuButtonActivator(id) {
+	$(".clickable-menuitem").removeClass("active").attr("name","");
+	$("#" + id).addClass("active").attr("name", "active");
+	switch (id) {
+		case "tag_cont_menu" :
+			$("#hidden-menu").show();
+			break;
+		default :
+			$("#hidden-menu").hide();
+	}
+}
 function hiddenMenusOff() {
 	var hiddenMenus = document.getElementsByClassName("hidden-menuitem");
 	for(var a = 0; a < hiddenMenus.length; a++) {
@@ -99,7 +112,8 @@ function showHtml(pageContent) {
 	}
 	var result = convertTextHtmlFormat(text);
 	if (document.getElementById('html_menu').getAttribute("name") != "active") {
-		htmlView();
+		menuButtonActivator("html_menu");
+		//htmlView();
 		if(elementInEditor != null) { 
 			document.getElementById('editor-box').innerHTML = elementInEditor;
 			document.getElementsByName('selected_element')[0].innerHTML = result;
@@ -394,11 +408,11 @@ function editModeOn() {
 	}
 }
 
-function changeBgColor(element) {
+/*function changeBgColor(element) {
 	var color =  element.options[element.selectedIndex];
 	document.getElementById("editor-box").firstChild.style.backgroundColor = color.value;
 	//alert(color.value);
-}
+}*/
 
 function changeColor(element) {
 	var property = element.childNodes[0].id;
@@ -451,13 +465,13 @@ function changeVisibility(element) {
 		element.style.display = "none";
 	}
 }
-function setStyleValueSelect(element) {
+/*function setStyleValueSelect(element) {
 	var property = element.id;
 	var value = getSelectedOption(element);
 	var fs = document.getElementById("editor-box").firstChild.style;
 	fs[property] = value.value;
-}
-function updateFontSize(element) {
+}*/
+/*function updateFontSize(element) {
 	var property = element.id;
 	var num = element.childNodes[0].childNodes[0].value;
 	var ext = getSelectedOption(element.childNodes[1].childNodes[0]);
@@ -465,7 +479,7 @@ function updateFontSize(element) {
 	var value = num.toString();
 	value = value.concat(ext);
 	fs[property] = num + ext.value;
-}
+}*/
 function setStyleValueNumeric(element) {
 	var value = element.childNodes[1].childNodes[0].childNodes[0].value;
 	var select = getSelectedOption(element.childNodes[1].childNodes[1].childNodes[0]);
@@ -495,7 +509,7 @@ function multipleNumeric(element) {
 	var fs = document.getElementById("editor-box").firstChild.style;
 	fs[property] = sh + " " + sv + " " + sb + " " + sc;
 }
-function colorSelector(element) {
+/*function colorSelector(element) {
 	var property =element.childNodes[0].id;
 	var color = element.childNodes[1].childNodes[1].value;
 	var fs = document.getElementById("editor-box").firstChild.style;
@@ -504,7 +518,7 @@ function colorSelector(element) {
 	} else {
 		fs[property] = "#" + color;
 	}
-}
+}*/
 function changeSelectValue(element) {
 	var property = element.childNodes[1].childNodes[0].id;
 	var selected = getSelectedOption(element.childNodes[1].childNodes[0]);

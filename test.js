@@ -5,7 +5,7 @@ function removeTextArea(element) {
 		document.getElementById('new-text').style.backgroundColor="#123456";
 }
 //ha szerkesztunk egy bekezdest, akkor megjelenik a szovegmezo
-function editTextArea(element) {
+/*function editTextArea(element) {
 	var string = element.innerText;
 	var txt = document.createElement("textarea");
 	txt.setAttribute("autofocus", "autofocus");
@@ -14,7 +14,7 @@ function editTextArea(element) {
 	element.innerHTML = "";
 	document.getElementById('new-text').style.backgroundColor="green";
 	element.appendChild(txt);
-}
+}*/
 function editorFunction(element) {
 	if(editMode) {
 		//alert("editor");
@@ -22,11 +22,11 @@ function editorFunction(element) {
 	}
 }
 //A megkezdett, de meg be nem fejezett szovegbeviteli mezok szama, de masra is hasznalhato lesz
-function numOfActiveInputFields(name) {
+/*function numOfActiveInputFields(name) {
 	var tmp = getElementsByName(name);
 	var result = tmp.length;
 	return result;
-}
+}*/
 
 function changescript(text, element) {
 	if(document.getElementById('tag_cont_menu').getAttribute("name") != "active") {
@@ -36,7 +36,8 @@ function changescript(text, element) {
 				elementInEditor = document.getElementById('editor-box').innerHTML;
 			}
 			text = convertHtmlTextFormat(text);
-			TagContView();
+			menuButtonActivator("tag_cont_menu");
+			//TagContView();
 			document.getElementById('editor-box').innerHTML = text;
 			var changeOnClickInTmp_Object = getElementByClassName("tmp_object");
 			for (var a = 0; a < changeOnClickInTmp_Object.length; a++) {

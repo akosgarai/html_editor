@@ -10,6 +10,12 @@ function addMessage($message) {
 	$newMessage = "<span class=\"message\">".$message."</span>";
   $messages .= $newMessage;
 }
+function isErrorMessage($msg) {
+	if (substr($msg, 0, 5) == "ERROR") {
+		return TRUE;
+	}
+	return FALSE;
+}
 function checkImageType($file) {
 	//var_dump($file);
 	$types = array("image/gif", "image/jpeg", "image/jpg", "image/png", "image/x-png","image/pjpeg");
@@ -30,6 +36,10 @@ function checkImageType($file) {
 	} else {
 		addError("invalid file");
 	}
+}
+function generateModuleContainer($moduleId, $moduletext) {
+	$result = "<div class=\"module\" id=\"$moduleId\"><div class=\"modulname\" onclick=\"changeVisibility(this.parentNode.childNodes[1])\">$moduletext</div><div class=\"module-content-container\">";
+	return $result;
 }
 function createSelectSubmodule($values, $submoduleId, $labelText, $cssProperty, $class1, $class2) {
 	$module = "<div id=\"$submoduleId-submodule\"><div class=\"$class1 labelbutton\" onclick=\"changeSelectValue(this.parentNode)\"><p>$labelText</p></div><div class=\"$class2\"><select id=\"$cssProperty\" class=\"right\">";

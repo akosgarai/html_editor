@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>{$title}12</title>
+	<title>{$title}</title>
 	<link rel="stylesheet" type="text/css" href="test.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
 		<form method="post" action="index.php" name="realease" id="realease">
 			<input type="submit" id="realease_page" name="realease_page" class="main_page_button" value="{$buttons[2]}">
 		</form>
-		<div id="saved-pages" class="saved-pages">{$savedPages}</div>
+		<div id="module" class="module">{$additionalModule}</div>
 		<div id="messages-box">{$messages}</div>
 	</div>
 	<div style="">

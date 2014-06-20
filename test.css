@@ -32,7 +32,7 @@
 	border-radius: 5px;
 	cursor: pointer;
 }
-.clickable-menuitem active {
+.clickable-menuitem.active {
 	background-color: green;
 }
 

@@ -65,7 +65,7 @@ function getSelectionCharOffsetsWithin(element) {
 }
 //highlight
 function highlightText(string, newClassName) {
-	var element = document. createElement("span");
+	var element = document.createElement("span");
 	element.setAttribute("name", "inserted");
 	element.className = newClassName;
 	element.innerHTML = string;

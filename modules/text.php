@@ -6,6 +6,16 @@ class textModule {
 		return $module;
 	}
 	
+	function createHHiddenMenu() {
+			$hiddenMenu = "<div class=\"hidden-menuitem numericmenu\" id=\"new-h\"><div class=\"double\" onclick=\"insertText(this.parentNode)\">H</div><div class=\"double\"><input type=\"number\" name=\"num-of-h\" id=\"num-of-h\" style=\"width:35px;\" min=\"1\" max=\"7\" / ></div></div>";
+			return $hiddenMenu;
+	}
+
+	function createListHiddenMenu() {
+			$hiddenMenu = "<div class=\"hidden-menuitem numericmenu\" id=\"new-list\"><div class=\"double\" onclick=\"insertList(this.parentNode)\">List</div><div class=\"double\"><input type=\"number\" name=\"num-of-row\" id=\"num-of-row\" style=\"width:35px;\" min=\"1\" max=\"9\"/ ></div></div>";
+			return $hiddenMenu;
+	}
+
 	function createTextModule() {
 		$module = generateModuleContainer("textModule", "Szoveg");
 		//$fsize = $this->fontSize();

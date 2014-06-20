@@ -2,6 +2,7 @@
 <head>
 	<title>{$title}</title>
 	<link rel="stylesheet" type="text/css" href="test.css">
+	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="common.js"></script>
 	<script type="text/javascript" src="editorMenubar.js"></script>
 	<script type="text/javascript" src="test.js"></script>
@@ -38,7 +39,7 @@
 		<script type="text/javascript">
 			{$initScript}
 		</script>
-		<div id="message-box" style="float:left;">{$messages}</div>
+		<div id="message-box" style="float:left; padding-top: 30px;">{$messages}</div>
 	</div>
 </body>
 </html>
