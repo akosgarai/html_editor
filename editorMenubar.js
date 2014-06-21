@@ -13,10 +13,7 @@ function menuButtonActivator(id) {
 	}
 }
 function hiddenMenusOff() {
-	var hiddenMenus = document.getElementsByClassName("hidden-menuitem");
-	for(var a = 0; a < hiddenMenus.length; a++) {
-		hiddenMenus[a].style.backgroundColor = "#123456";
-	}
+	$(".hidden-menuitem").removeClass("active");
 }
 //szuksegtelen divek torlese
 function removeUselessDivs(element) {
@@ -117,7 +114,7 @@ function insertText(text) {
 		return;
 	}
 	hiddenMenusOff();
-	document.getElementById('new-text').style.backgroundColor="green";
+	$('#new-text').addClass("active");
 	editMode = false;
 	var txt = document.createElement("textarea");
 	var finished = document.createElement("button");
@@ -251,7 +248,7 @@ function insertList(element) {
 		return;
 	}
 	hiddenMenusOff();
-	document.getElementById('new-text').style.backgroundColor="green";
+	$('#new-text').addClass("active");
 	editMode = false;
 	var listForm = document.createElement("div");
 	listForm.setAttribute("name", "editor-elem");
@@ -296,6 +293,7 @@ function constructUrl(element) {
 	result.setAttribute("onclick", "editorFunction(this)");
 	result.innerHTML = text;
 	element.parentNode.replaceChild(result, element);
+	$('#new-a').removeClass("active");
 }
 function insertUrl(element) {
 	//egyszerre csak egy szovegmezot lehet szerkeszteni
@@ -304,7 +302,7 @@ function insertUrl(element) {
 		return;
 	}
 	hiddenMenusOff();
-	document.getElementById('new-text').style.backgroundColor="green";
+	$('#new-a').addClass("active");
 	editMode = false;
 	var urlForm = document.createElement("div");
 	urlForm.setAttribute("name", "editor-elem");
@@ -378,7 +376,7 @@ function editModeOn() {
 	}
 	hiddenMenusOff();
 	if(!editMode) {
-		document.getElementById('edit-mode').style.backgroundColor="green";
+		$('#edit-mode').addClass("active");
 		editMode = true;
 		onclickToTexts();
 	} else {

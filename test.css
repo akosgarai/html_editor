@@ -57,6 +57,9 @@
 	border: 0px;
 	height: 19px;
 }
+.hidden-menuitem.active {
+	background-color: green;
+}
 .bigmenu {
 	min-width: 80px;
 }

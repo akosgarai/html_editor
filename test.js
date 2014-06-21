@@ -2,7 +2,7 @@
 function removeTextArea(element) {
 	var string = element.value;
 	element.parentNode.innerHTML = string;
-		document.getElementById('new-text').style.backgroundColor="#123456";
+	$('#new-text').removeClass("active");
 }
 //ha szerkesztunk egy bekezdest, akkor megjelenik a szovegmezo
 /*function editTextArea(element) {
