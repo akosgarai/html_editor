@@ -74,6 +74,7 @@ function highlightText(string, newClassName) {
 function isInClass(element, cName) {
 	var regExp = new RegExp(cName);
 	return regExp.test(element.className);
+	//return element.hasClass(cName);
 }
 function replaceTextNode(textNode, start, end, newClass) {
 				var fragment = document.createDocumentFragment();
@@ -246,3 +247,4 @@ function getMeta(src) {
 		imageHeight: image.height
 	}
 }
+
