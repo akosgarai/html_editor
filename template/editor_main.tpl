@@ -5,6 +5,7 @@
 	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="common.js"></script>
 	<script type="text/javascript" src="editorMenubar.js"></script>
+	<script type="text/javascript" src="editorObject.js"></script>
 	<script type="text/javascript" src="test.js"></script>
 	<script type="text/javascript" src="save.js"></script>
 	<cfheader name="X-XSS-Protection" value="0" />

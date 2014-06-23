@@ -27,10 +27,11 @@ class editorController {
 		$smarty->assign('boxModule', $boxModule->createBoxModule());
 		$smarty->assign('createDivHiddenMenu', $boxModule->createDivHiddenMenu());
 		if($pageContent == NULL){
-			$smarty->assign('initScript', 'changescript("")');
+			$smarty->assign('initScript', 'editor.init("new")');
 		} else {
 			$pageContent = htmlspecialchars_decode($pageContent);
 			$smarty->assign('pageContent', $pageContent);
+			$smarty->assign('initScript', 'editor.init("loaded")');
 		}
 		$smarty->display('template/editor_main.tpl');
 	}
