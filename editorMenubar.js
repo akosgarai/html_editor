@@ -17,58 +17,47 @@ function hiddenMenusOff() {
 }
 //szuksegtelen divek torlese
 function removeUselessDivs(element) {
-	var result = document.createElement("div");
+	var result = $("<div></div>");
 	if (typeof(element) == "undefined") { return 3; }
 	//Ha ures es div, akkor visszater 1-el, ha div es nincs id, akkor visszater 2-vel, egyebkent pedig rekurzivan megy a gyerkekre
-	if (element.tagName == "DIV" && element.innerHTML == "" && element.id == "") {
+	if ($(element).prop("tagName") == "DIV" && $(element).html() == "" && $(element).attr("id") == "") {
 		return 1;
-	} else if (element.tagName == "DIV" && element.id == "") {
+	} else if ($(element).prop("tagName") == "DIV" && $(element).attr("id") == "") {
 		return 2;
-	} else if (!element.childNodes[0]) {
+	} else if ($(element).children().length < 1) {
 		return 3;
 	} else {
-		while (element.childNodes[0]) {
-			var retVal = removeUselessDivs(element.childNodes[0]);
+		while ($(element).children().length > 0) {
+			var retVal = removeUselessDivs($(element).children().first());
 			if (retVal == 3) {
-				result.appendChild(element.childNodes[0]);
+				result.append($(element).children().first());
 			} else if (retVal == 2) {
-				while (element.childNodes[0].childNodes[0]) {
-					result.appendChild(element.childNodes[0].childNodes[0]); 
+				while ($(element).children().first().children().length > 0) {
+					result.append($(element).children().first().children().first()); 
 				}
-				while(element.childNodes[1]) {
-					result.appendChild(element.childNodes[1]); 
+				while($(element).children().length > 1) {
+					result.append($(element + ":nth-child(2)")); 
 				}
-				element.innerHTML = "";
-				while (result.childNodes[0]) {
-					element.appendChild(result.childNodes[0]);
+				$(element).html("");
+				while (result.children().length > 0) {
+					$(element).append(result.children().first());
 				}
 				return 4;
 			} else if(retVal == 4) {
 				while (retVal != 3) {
-					retVal = removeUselessDivs(element.childNodes[0]);
-					if (retVal == 3) result.appendChild(element.childNodes[0]);
+					retVal = removeUselessDivs($(element).children().first());
+					if (retVal == 3) result.append($(element).children().first());
 				}
 			}
 		}
 	}
-	element.innerHTML = "";
-	while(result.childNodes[0]) {
-		element.appendChild(result.childNodes[0]);
+	$(element).html("");
+	while(result.children().length > 0) {
+		$(element).append(result.children().first());
 	}
 	return 3;
 }
 
-function clickableElementsIdNull(element) {
-	if(element.tagName == "DIV" && element.id != "" && element.id.substring(0, 9) == "clickable") {
-		element.setAttribute("id", "");
-	}
-	if(!element.childNodes[0]) {
-		return 1;
-	}
-	for (var cntr = 0; cntr < element.childNodes.length; cntr++) {
-		clickableElementsIdNull(element.childNodes[cntr]);
-	}
-}
 //HTML nezetre valtas - a nyomogomb lenyomasa
 function showHtml(pageContent) {
 	if(typeof(pageContent) != "undefined" && pageContent != ""){
@@ -116,79 +105,37 @@ function insertText(text) {
 	hiddenMenusOff();
 	$('#new-text').addClass("active");
 	editMode = false;
-	var txt = document.createElement("textarea");
-	var finished = document.createElement("button");
-	var cancel = document.createElement("button");
-	txt.setAttribute("autofocus", "autofocus");
-	txt.setAttribute("name", "editorTextInputField");
-	txt.setAttribute("id", "editorTextInputField");
-	finished.innerText = "Finished"
-	finished.setAttribute("type", "button");
-	finished.setAttribute("onclick", "removeTextArea(document.getElementById(\"editorTextInputField\"))");
-	cancel.innerText = "Remove";
-	cancel.setAttribute("type", "button");
-	cancel.setAttribute("onclick", "removeParent(this)");
+	var txt = $("<textarea></textarea>").attr("autofocus", "autofocus").attr("name", "editorTextInputField").attr("id", "editorTextInputField");
+	var finished = $("<button></button>").attr("type", "button").attr("onclick", "removeTextArea(document.getElementById(\"editorTextInputField\"))").html("Finished");
+	var cancel = $("<button></button>").attr("type", "button").attr("onclick", "removeParent(this)").html("Remove");
 	if (typeof(text) == "undefined") {
-		var pp = document.createElement("p");
-		pp.setAttribute("name", "editor-elem");
-		pp.setAttribute("onclick", "editorFunction(this)");
-		pp.setAttribute("id", generateId(pp));
-		pp.appendChild(txt);
-		pp.appendChild(finished);
-		pp.appendChild(cancel);
-		var element = document.getElementById("editor-box");
-		if(element.firstChild) {
-			element.firstChild.appendChild(pp);
-		} else {
-			var dn1 = document.createElement("div");
-			var divId = generateId(dn1);
-			dn1.setAttribute("id", divId);
-			element.appendChild(dn1);
-			element.firstChild.appendChild(pp);
-		}
+		var pp = $("<p></p>").attr("name", "editor-elem").attr("onclick", "editorFunction(this)");
+		pp.attr("id", generateId(pp)).append(txt).append(finished).append(cancel);
+		$("#editor-box div").first().append(pp);
 	} else if(typeof(text) == "object" && text.id == "new-h") {
 		var num = text.childNodes[1].childNodes[0].value;
-		var pp = document.createElement("h" + num);
-		pp.setAttribute("name", "editor-elem");
-		pp.setAttribute("onclick", "editorFunction(this)");
-		pp.appendChild(txt);
-		pp.appendChild(finished);
-		pp.appendChild(cancel);
-		var element = document.getElementById("editor-box");
-		if(element.firstChild) {
-			element.firstChild.appendChild(pp);
-		} else {
-			var dn1 = document.createElement("div");
-			var divId = generateId(dn1);
-			dn1.setAttribute("id", divId);
-			element.appendChild(dn1);
-			element.firstChild.appendChild(pp);
-		}
+		var pp = $("<h" + num + "></h" + num + ">").attr("name", "editor-elem").attr("onclick", "editorFunction(this)");
+		pp.attr("id", generateId(pp)).append(txt).append(finished).append(cancel);
+		$("#editor-box div").first().append(pp);
 	} else if (typeof(text) == "object" && text.className == "addbutton") {
-		text.parentNode.replaceChild(txt, text);
-		txt.parentNode.appendChild(finished);
-		txt.parentNode.appendChild(cancel);
-		txt.parentNode.setAttribute("onclick", "editorFunction(this)");
+		$(text).replaceWith(txt);
+		$("#editorTextInputField").parent().attr("onclick", "editorFunction(this)").append(finished).append(cancel);
 		var next = createListAdd();
-		txt.parentNode.parentNode.appendChild(next);
+		txt.parent().parent().append(next);
 	} else if (typeof(text) == "object" && text.className == "replaceToA") {
 		insertUrl(text);
 	} else {
-		if (typeof(text) != "undefined" && text != "") { txt.innerHTML = text.innerHTML; }
-		text.innerHTML = "";
-		text.appendChild(txt);
-		text.appendChild(finished);
-		text.appendChild(cancel);
+		if (typeof(text) != "undefined" && text != "") { $(txt).html($(text).html()); }
+		$(text).html("");
+		$(text).append(txt);
+		$(text).append(finished);
+		$(text).append(cancel);
 	}
 }
 function createListAdd() {
-	var add = document.createElement("div");
-	add.setAttribute("class", "addbutton");
-	add.setAttribute("id", "list-add-button");
-	add.setAttribute("onclick", "insertText(this)");
-	add.innerHTML = "+1";
-	var result = document.createElement("li");
-	result.appendChild(add);
+	var add = $("<div></div>").attr("id", "list-add-button").attr("onclick", "insertText(this)").addClass("addbutton").html("+1");
+	var result = $("<li></li>");
+	result.append(add);
 	return result;
 }
 function createList(element) {
@@ -196,49 +143,46 @@ function createList(element) {
 	var list;
 	var cssRule = element.childNodes[0].value;
 	if (type.innerHTML == "ol") {
-		list = document.createElement("ol");
+		list = $("<ol></ol>");
 	} else if (type.innerHTML == "ul") {
-		list = document.createElement("ul");
+		list = $("<ul></ul>");
 	}
-	list.setAttribute("class", "list");
+	list.addClass( "list");
 	switch (cssRule) {
 		case "1": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-one");
+			list.addClass("list-one");
 			break;
 		case "2": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-two");
+			list.addClass("list-two");
 			break;
 		case "3": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-three");
+			list.addClass("list-three");
 			break;
 		case "4": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-four");
+			list.addClass("list-four");
 			break;
 		case "5": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-five");
+			list.addClass("list-five");
 			break;
 		case "6": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-six");
+			list.addClass("list-six");
 			break;
 		case "7": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-seven");
+			list.addClass("list-seven");
 			break;
 		case "8": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-eight");
+			list.addClass("list-eight");
 			break;
 		case "9": 
-			list.setAttribute("class", list.getAttribute("class") + " " + "list-nine");
+			list.addClass("list-nine");
 			break;
 	}
 	var lie = createListAdd();
-	list.appendChild(lie);
-	element.parentNode.replaceChild(list, element);
+	list.append(lie);
+	$(element).replaceWith(list);
 }
 function createOption(value, text) {
-	var option = document.createElement("option");
-	option.setAttribute("name", "editor-elem");
-	option.setAttribute("value", value);
-	option.innerHTML = text;
+	var option = $("<option></option>").attr("name", "editor-elem").attr("value", value).html(text);
 	return option;
 }
 function insertList(element) {
@@ -250,32 +194,21 @@ function insertList(element) {
 	hiddenMenusOff();
 	$('#new-text').addClass("active");
 	editMode = false;
-	var listForm = document.createElement("div");
-	listForm.setAttribute("name", "editor-elem");
-	listForm.setAttribute("id", "editorTextInputField");
-	listForm.setAttribute("class", "listform");
+	var listForm = $("<div></div>").attr("name", "editor-elem").attr("id", "editorTextInputField").addClass("listform");
 	var cssRule = element.childNodes[1].childNodes[0].value;
-	var hinput = document.createElement("input");
-	hinput.setAttribute("type", "hidden");
-	hinput.setAttribute("value", cssRule);
-	listForm.appendChild(hinput);
-	var listType = document.createElement("select");
+	var hinput = $("<input></input>").attr("type", "hidden").attr("value", cssRule);
+	listForm.append(hinput);
+	var listType = $("<select></select>")
 	var options = createOption("ol", "ol");
-	listType.appendChild(options);
-	options = createOption("ul", "ul");
-	listType.appendChild(options);
-	listForm.appendChild(listType);
-	var okbtn = document.createElement("button");
-	okbtn.setAttribute("type", "button");
-	okbtn.innerHTML = "Ok";
-	okbtn.setAttribute("onclick", "createList(this.parentNode)");
-	var removebtn = document.createElement("button");
-	removebtn.setAttribute("type", "button");
-	removebtn.innerHTML = "Cancel";
-	removebtn.setAttribute("onclick", "removeParent(this)");
-	listForm.appendChild(okbtn);
-	listForm.appendChild(removebtn);
-	document.getElementById("editor-box").firstChild.appendChild(listForm);
+	listType.append(options);
+	var options2 = createOption("ul", "ul");
+	listType.append(options2);
+	listForm.append(listType);
+	var okbtn = $("<button></button>").attr("type", "button").attr("onclick", "createList(this.parentNode)").html("Ok");
+	var removebtn = $("<button></button>").attr("type", "button").attr("onclick", "removeParent(this)").html("Cancel");
+	listForm.append(okbtn);
+	listForm.append(removebtn);
+	$("#editor-box div:first-child").append(listForm);
 }
 //uj url beszurasa modul
 function constructUrl(element) {
@@ -304,59 +237,34 @@ function insertUrl(element) {
 	hiddenMenusOff();
 	$('#new-a').addClass("active");
 	editMode = false;
-	var urlForm = document.createElement("div");
-	urlForm.setAttribute("name", "editor-elem");
-	urlForm.setAttribute("id", "editorTextInputField");
-	urlForm.setAttribute("class", "urlform");
-	var labelText = document.createElement("label")
-	labelText.setAttribute("for", "displayText");
-	labelText.innerHTML = "Text: ";
-	var displayText = document.createElement("input");
-	displayText.setAttribute("name", "displayText");
-	displayText.setAttribute("id", "displayText");
-	displayText.style.width = "200px";
-	urlForm.appendChild(labelText);
-	urlForm.appendChild(displayText);
-	var labelUrl = document.createElement("label")
-	labelUrl.setAttribute("for", "urlText");
-	labelUrl.innerHTML = "URL:"
-	var urlText = document.createElement("input");
-	urlText.setAttribute("name", "urlText");
-	urlText.setAttribute("id", "urlText");
-	urlText.setAttribute("type", "text");
-	urlText.style.width = "200px";
-	urlForm.appendChild(labelUrl);
-	urlForm.appendChild(urlText);
-	var labelnt = document.createElement("label");
-	labelnt.setAttribute("for", "newtab");
-	labelnt.innerHTML = "New tab:";
-	var newtab = document.createElement("input");
-	newtab.setAttribute("type", "checkbox");
-	newtab.setAttribute("name", "newtab");
-	newtab.setAttribute("id", "newtab");
-	urlForm.appendChild(labelnt);
-	urlForm.appendChild(newtab);
-	var okbtn = document.createElement("button");
-	okbtn.setAttribute("type", "button");
-	okbtn.innerHTML = "Ok";
-	okbtn.setAttribute("onclick", "constructUrl(this.parentNode)");
-	var removebtn = document.createElement("button");
-	removebtn.setAttribute("type", "button");
-	removebtn.innerHTML = "Cancel";
-	removebtn.setAttribute("onclick", "removeParent(this)");
-	urlForm.appendChild(removebtn);	
-	urlForm.appendChild(okbtn);	
+	var urlForm = $("<div></div>").attr("name", "editor-elem").attr("id", "editorTextInputField").addClass("urlform");
+	var labelText = $("<label></label>").attr("for", "displayText").html("Text: ");
+	var displayText = $("<input></input>").attr("name", "displayText").attr("type", "text").attr("id", "displayText").css("width", "200px");
+	urlForm.append(labelText);
+	urlForm.append(displayText);
+	var labelUrl = $("<label></label>").attr("for", "urlText").html("URL: ");
+	var urlText = $("<input></input>").attr("name", "urlText").attr("id", "urlText").attr("type", "text").css("width", "200px");
+	urlForm.append(labelUrl);
+	urlForm.append(urlText);
+	var labelnt = $("<label></label>").attr("for", "newtab").html("New tab: ");
+	var newtab = $("<input></input>").attr("name", "newtab").attr("id", "newtab").attr("type", "checkbox");
+	urlForm.append(labelnt);
+	urlForm.append(newtab);
+	var okbtn = $("<button></button>").attr("type", "button").attr("onclick", "constructUrl(this.parentNode)").html("Ok");
+	var removebtn = $("<button></button>").attr("type", "button").attr("onclick", "removeParent(this)").html("Cancel"); 
+	urlForm.append(removebtn);	
+	urlForm.append(okbtn);	
 	if (typeof (element) != "undefined") {
-		displayText.setAttribute("value", element.innerHTML);
-		var url = element.getAttribute("name");
+		displayText.val($(element).html());
+		var url = $(element).attr("name");
 		if (url.substr(-6) == "_blank") {
-			newtab.checked = "true";
+			newtab.attr("checked", "true");
 			url = url.substr(0, url.length - 6);
 		}
-		urlText.setAttribute("value", url);
-		element.parentNode.replaceChild(urlForm, element);
+		urlText.val(url);
+		$(element).replaceWith(urlForm);
 	} else {
-		document.getElementById("editor-box").firstChild.appendChild(urlForm);
+		$("#editor-box div:first-child").append(urlForm);
 	}
 }
 //felpakolja az onclick esemenyt a p, h* tagekre, ha edit modba valtunk
@@ -429,7 +337,8 @@ function insertImage(select) {
 }
 function uploadImage(element) {
 	if (document.getElementById("html_menu").getAttribute("name") == "active") {
-		clickableElementsIdNull(document.getElementById('editor-box'));
+		//clickableElementsIdNull(document.getElementById('editor-box'));
+		$("div[id^='clickable']").attr("id", "");
 		removeUselessDivs(document.getElementById('editor-box'));
 		var page = document.getElementById("editor-box").innerHTML;
 		document.getElementById("saveEditorContent").value = preSaveFormat(page);

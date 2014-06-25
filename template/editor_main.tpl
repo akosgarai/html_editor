@@ -15,7 +15,7 @@
 		<div style="float: left;">
 			<div class="editor-menubar-container">
 				<div id="editor-menu" class="menubar">
-					<div class="clickable-menuitem" id="html_menu"  onclick="showHtml()">{$menus[0]}</div>
+					<div class="clickable-menuitem" id="html_menu"  onclick="editor.setToHtml()">{$menus[0]}</div>
 					<div class="clickable-menuitem" id="tag_cont_menu" onclick="">{$menus[1]}</div>
 					<div class="clickable-menuitem" id="save_page" onclick="savePage()">{$menus[2]}</div>
 				</div>

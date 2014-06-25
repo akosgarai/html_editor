@@ -33,7 +33,8 @@ function getElementByClassName(classname)	{
 }
 //egyedi Id-t general
 function generateId(element) {
-	var id = element.tagName + "_nr_" + idNumber;
+	var id = $(element).prop("tagName");
+	id = id + "_nr_" + idNumber;
 	idNumber++;
 	return id;
 }
