@@ -28,20 +28,20 @@ function editorFunction(element) {
 	return result;
 }*/
 
-function changescript(text, element) {
-	if(document.getElementById('tag_cont_menu').getAttribute("name") != "active") {
+function changescript(element) {
+	if($("#tag_cont_menu").attr("name") != "active") {
 		
 			if(typeof(element) != "undefined") { 
 				element.setAttribute("name", "selected_element"); 
 				elementInEditor = document.getElementById('editor-box').innerHTML;
 			}
-			text = convertHtmlTextFormat(text);
 			menuButtonActivator("tag_cont_menu");
-			document.getElementById('editor-box').innerHTML = text;
-			var changeOnClickInTmp_Object = getElementByClassName("tmp_object");
+			$("#editor-box").html(convertHtmlTextFormat(element.innerText));
+			/*var changeOnClickInTmp_Object = getElementByClassName("tmp_object");
 			for (var a = 0; a < changeOnClickInTmp_Object.length; a++) {
-				changeOnClickInTmp_Object[a].onclick = function(e) { editorFunctione(e)};
-			}
+				changeOnClickInTmp_Object[a].onclick = function(e) { editorFunction(e)};
+			}*/
+			$(".tmp_object").attr("onclick", "editorFunction(this)");
 			 clickableElementsIdNull(document.getElementById('editor-box'));
 			 removeUselessDivs(document.getElementById('editor-box'));
 			var change = document.getElementsByClassName("replaceToP"); 
@@ -86,7 +86,7 @@ function convertTextHtmlFormat(text) {
 		var curChar = (myInput.charAt(i));
 		var nextChars =(myInput.charAt(i+1)) + (myInput.charAt(i+2)) + (myInput.charAt(i+3)); 
 		var id = generateId(document.createElement("div"));
-		var spanStart = '<div id=\"clickable_' + id + '\" class=\"tmp_object\" style=\"padding-left: ' + 10*indent + 'px;\" onClick=\"changescript(this.innerText, this)\">';
+		var spanStart = '<div id=\"clickable_' + id + '\" class=\"tmp_object\" style=\"padding-left: ' + 10*indent + 'px;\" onClick=\"changescript(this)\">';
 		var spanEnd = '</div>';
 		if (curChar == '<') {
 			if(myInput.charAt(i+1) == '/') {
