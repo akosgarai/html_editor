@@ -7,7 +7,7 @@ class textModule {
 	}
 	
 	function createHHiddenMenu() {
-			$hiddenMenu = "<div class=\"hidden-menuitem numericmenu\" id=\"new-h\"><div class=\"double\" onclick=\"insertText(this.parentNode)\">H</div><div class=\"double\"><input type=\"number\" name=\"num-of-h\" id=\"num-of-h\" style=\"width:35px;\" min=\"1\" max=\"7\" / ></div></div>";
+			$hiddenMenu = "<div class=\"hidden-menuitem numericmenu\" id=\"new-h\"><div class=\"double\" onclick=\"editor.insertText(this.parentNode)\">H</div><div class=\"double\"><input type=\"number\" name=\"num-of-h\" id=\"num-of-h\" style=\"width:35px;\" min=\"1\" max=\"7\" / ></div></div>";
 			return $hiddenMenu;
 	}
 

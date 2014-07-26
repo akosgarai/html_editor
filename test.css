@@ -1,13 +1,27 @@
+.main_page_button {
+	background-color: #123456;
+	width: 60px;
+	text-align: center;
+	height: 20px;
+	margin: 6px 5px 0 5px;
+	float: left;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
 #editor-menu {
 	background-color: gray;
 	color: red;
+	width: 1020px;
 	max-width: 1020px;
 	min-height: 30px;
 }
 #editor-container {
 	max-width: 1220px;
 	min-width: 1220px;
-	margin-right: 200px;
+	margin-left: auto;
+	margin-right: auto;
 }
 .editor {
 	max-width: 1020px;
@@ -78,12 +92,14 @@
 #num-of-divs {
 	margin: 4px 6px 0px 0px;
 }
-#style-menu {
+.editor-left-menu {
 	background-color: gray;
 	float: left;
 	padding-top: 60px;
 	max-width: 200px;
 	min-width: 200px;
+}
+.editor-main {
 	min-height: 400px;
 }
 .bg-color-selector {
@@ -296,4 +312,13 @@ h1 {
 	width: 11%;
 	float: left;
 	display: block;
+}
+
+.footer-menu-container {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	height: 30px;
+	width: 100%;
+	background: #999;
 }

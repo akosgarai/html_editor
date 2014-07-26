@@ -52,6 +52,15 @@ class editorModel {
 			return $result;
 		}
 	}
+	function loadPageDetails($page_id) {
+		$query = "SELECT pages.page_id, page_content, page_name, page_title, header_id, footer_id, has_scripts, has_css, has_xiti FROM pages LEFT JOIN page_details USING (page_id) WHERE page_id = ".$page_id;
+		$result = mysql_query($query, $this->cid);
+		if (!$result) {
+			return "ERROR_LOADPAGEDETAILS_ERROR, query: ".$query." page_id: ".$page_id." errormsg: ".mysql_error();
+		} else {
+			return $result;
+		}
+	}
 	function uploadImage($imageName) {
 		$query = "INSERT INTO images (name, src) VALUES ('".$imageName."', 'upload/".$imageName."')";
 		$result = mysql_query($query, $this->cid);

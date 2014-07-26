@@ -2,30 +2,29 @@
 <head>
 	<title>{$title}</title>
 	<link rel="stylesheet" type="text/css" href="test.css">
+	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="indexObject.js"></script>
+	<cfheader name="X-XSS-Protection" value="0" />
 </head>
 <body>
-	<div id="index-container">
-		<form method="post" action="editor_main.php" name="select" id="select">
-			<input type="submit" id="new_page" name="new_page" class="main_page_button" value="{$buttons[0]}">
-		</form>
-		<form method="post" action="index.php" name="load" id="load">
-			<input type="submit" id="load_page" name="load_page" class="main_page_button" value="{$buttons[1]}">
-		</form>
-		<form method="post" action="index.php" name="realease" id="realease">
-			<input type="submit" id="realease_page" name="realease_page" class="main_page_button" value="{$buttons[2]}">
-		</form>
-		<div id="module" class="module">{$additionalModule}</div>
-		<div id="messages-box">{$messages}</div>
-	</div>
-	<div style="">
-		<div style="width:50%; float:left;">Modern browsers have Array#indexOf, which does exactly that; this is in the new(ish) ECMAScript 5th edition specification, but it has been in several browsers for years. Older browsers can be supported using the code listed in the "compatibility" section at the bottom of that page.
-		
+	<div id="editor-container">
+		<div style="float: left; ">
+			<div class="editor-menubar-container">
+				<div id="editor-menu" class="menubar">
+					<div id="new_page" name="new_page" class="main_page_button" onclick="document.getElementById('select').submit();">{$buttons[0]}
+						<form method="post" action="editor_main.php" name="select" id="select">
+							<input type="hidden" name="new_page" id="new_page">
+						</form>
+					</div>
+					<div>{$additionalModule}</div>
+				</div>
+			</div>
+			<div id="editor-box" class="editor"></div>
 		</div>
-		<div style="width:50%; float:left;">Modern browsers have Array#indexOf, which does exactly that; this is in the new(ish) ECMAScript 5th edition specification, but it has been in several browsers for years. Older browsers can be supported using the code listed in the "compatibility" section at the bottom of that page.
-		
+		<div id="style-menu" class="editor-left-menu ">
 		</div>
-		<div>{$tmp}</div>
 	</div>
 </body>
 </html>
+
 

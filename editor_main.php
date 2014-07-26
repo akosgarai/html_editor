@@ -59,9 +59,24 @@ class editorController {
 			if ($conn != "OK") {
 				addError($conn);
 			}
+		//var_dump($row);
+			if (array_key_exists("preview", $_POST)) {
+				$l = $load->loadPageDetails($_POST['saved_pages']);
+				$row = mysql_fetch_assoc($l);
+				$resp = htmlspecialchars_decode($row[page_content]);
+				header("content-type:application/json");
+				$json_resp = array(
+					'page_content' => $resp,
+					'page_title' => $row[page_title],
+					'page_name' => $row[page_name],
+					'header_id' => $row[header_id],
+					'footer_id' => $row[footer_id],
+				);
+				echo json_encode($json_resp);
+				return;
+			}
 			$l = $load->loadPage($_POST['saved_pages']);
 			$row = mysql_fetch_assoc($l);
-		//var_dump($row);
 			$this->construct($row[page_content]);
 		}
 	/************

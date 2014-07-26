@@ -20,7 +20,7 @@
 					<div class="clickable-menuitem" id="save_page" onclick="savePage()">{$menus[2]}</div>
 				</div>
 				<div id="hidden-menu" class="hidden-menubar">
-					<div class="hidden-menuitem bigmenu" id="new-text" onclick="insertText()">P</div>
+					<div class="hidden-menuitem bigmenu" id="new-text" onclick="editor.generalInserter('insert', 'p')">P</div>
 					<div class="hidden-menuitem bigmenu" id="new-a" onclick="insertUrl()">A</div>
 					<div class="hidden-menuitem bigmenu" id="edit-mode" onclick="editModeOn()">Edit</div>
 					<button class="hidden-menuitem smallmenu" id="new-b" onclick="getSelectionHtml('bold')">B</button>
@@ -32,7 +32,7 @@
 			</div>
 			<div id="editor-box" class="editor">{$pageContent}</div>
 		</div>
-		<div id="style-menu">
+		<div id="style-menu" class="editor-left-menu editor-main">
 		{$backgroundModule}
 		{$textModule}
 		{$boxModule}

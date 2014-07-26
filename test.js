@@ -18,7 +18,7 @@ function removeTextArea(element) {
 function editorFunction(element) {
 	if(editMode) {
 		//alert("editor");
-		insertText(element);
+		editor.generalInserter("edit", element);
 	}
 }
 //A megkezdett, de meg be nem fejezett szovegbeviteli mezok szama, de masra is hasznalhato lesz
@@ -28,7 +28,7 @@ function editorFunction(element) {
 	return result;
 }*/
 
-function changescript(element) {
+/*function changescript(element) {
 	if($("#tag_cont_menu").attr("name") != "active") {
 		
 			if(typeof(element) != "undefined") { 
@@ -50,7 +50,7 @@ function changescript(element) {
 				change[c].parentNode.replaceChild(ch, change[c]);
 			}
 	}
-}
+}*/
 function convertHtmlTextFormat(text) {
 	var myInput = text;
 	var myOutput = '';

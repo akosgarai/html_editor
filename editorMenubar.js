@@ -59,7 +59,7 @@ function removeUselessDivs(element) {
 }
 
 //HTML nezetre valtas - a nyomogomb lenyomasa
-function showHtml(pageContent) {
+/*function showHtml(pageContent) {
 	if(typeof(pageContent) != "undefined" && pageContent != ""){
 		alert(typeof(pageContent));
 		var	text = pageContent;
@@ -93,7 +93,7 @@ function showHtml(pageContent) {
 		}
 		removeUselessDivs(document.getElementById('editor-box'));
 	}
-}
+}*/
 //uj szovegdoboz beszurasa es arra fokuszalas, hogy lehessen bele irni. Az iras addig tart, amig ki nem kattintunk belole.
 //Az uj szoveg beszurasa gomb lenyomasa
 function insertText(text) {
@@ -133,7 +133,7 @@ function insertText(text) {
 	}
 }
 function createListAdd() {
-	var add = $("<div></div>").attr("id", "list-add-button").attr("onclick", "insertText(this)").addClass("addbutton").html("+1");
+	var add = $("<div></div>").attr("id", "list-add-button").attr("onclick", "editor.insertText(this)").addClass("addbutton").html("+1");
 	var result = $("<li></li>");
 	result.append(add);
 	return result;

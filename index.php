@@ -7,7 +7,7 @@ class indexPage {
 	public $additionalModule;
 	function listSavedPagesModule($queryResult) {
 		$module = "<form method=\"post\" action=\"editor_main.php\" name=\"loadPage\" id=\"loadPage\">";
-		$module .= "<select id=\"saved_pages\" name=\"saved_pages\">";
+		$module .= "<select id=\"saved_pages\" name=\"saved_pages\" onchange=\"index.preview()\">";
 		while ($row = mysql_fetch_assoc($queryResult)) {
 			$module .= "<option name=$row[page_id]>$row[page_id]</option>";
 		}
@@ -35,23 +35,16 @@ class indexPage {
 }
 	function init() {
 		$page = new indexPage();
-		if (array_key_exists("load_page", $_POST) || array_key_exists("realease_page", $_POST)) {
-			$load = new editorModel();
-			$conn = $load->connect();
-			if ($conn != "OK") {
-				addError($conn);
-			}
-			$s = $load->getSavedPages();
-			if (isErrorMessage($s)) {
-				addError($s);
-			} else {
-				if (array_key_exists("load_page", $_POST)){
-					$page->additionalModule = $page->listSavedPagesModule($s);
-		echo("load_ag_masik_else_ll_l");
-				} else if (array_key_exists("realease_page", $_POST)) {
-					$page->additionalModule = $page->selectToReleaseModule($s);
-				}
-			}
+		$load = new editorModel();
+		$conn = $load->connect();
+		if ($conn != "OK") {
+			addError($conn);
+		}
+		$s = $load->getSavedPages();
+		if (isErrorMessage($s)) {
+			addError($s);
+		} else {
+			$page->additionalModule = $page->listSavedPagesModule($s);
 		}
 		if (array_key_exists("saved_pages_release", $_POST)) {
 			$release = new editorModel();
